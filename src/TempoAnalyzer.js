@@ -3,7 +3,7 @@ import AudioAnalyser from "./AudioAnalyser";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-class Bpm extends Component {
+class TempoAnalyzer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,4 +61,4 @@ class Bpm extends Component {
   }
 }
 
-export default Bpm;
+export default TempoAnalyzer;

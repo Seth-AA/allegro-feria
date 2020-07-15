@@ -24,7 +24,7 @@ class AudioVisualiser extends Component {
     const width = canvas.width;
     const context = canvas.getContext("2d");
     let x = 0;
-    const size = 10000;
+    const size = audioData.length;
     // const sliceWidth = (width * 1.0) / songData.length;
     const sliceWidth = (width * 1.0) / size;
     context.lineWidth = 3;
@@ -32,7 +32,8 @@ class AudioVisualiser extends Component {
     context.clearRect(0, 0, width, height);
     context.beginPath();
     context.moveTo(0, height / 2);
-    for (const item of songData.slice(-size)) {
+    // console.log(audioData);
+    for (const item of audioData) {
       const y = item * 1.0 * height + height / 2;
       context.lineTo(x, y);
       x += sliceWidth;

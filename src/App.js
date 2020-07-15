@@ -1,15 +1,9 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Bpm from "./bpm";
 import Posture from "./Posture";
-import {
-  Navbar,
-  NavDropdown,
-  Nav,
-  Form,
-  FormControl,
-  Button,
-} from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
+import TempoAnalyzer from "./TempoAnalyzer";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
@@ -41,23 +35,15 @@ export default function App() {
             <Bpm />
           </Route>
           <Route path="/tempo-analyzer">
-            <Users />
+            <TempoAnalyzer></TempoAnalyzer>
           </Route>
           <Route path="/posture-analyzer">
-            <Posture/>
+            <Posture />
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
-
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
 }
 
 function Users() {
