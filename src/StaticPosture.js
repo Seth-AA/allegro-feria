@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import PoseNet from "react-posenet";
 import "./Posture.css";
 
@@ -21,9 +21,9 @@ function Evaluation(posesJson) {
     if (
         Math.abs(
             parseInt(rightWrist.y, 10) -
-                ((159 - 90) / (144 - 309)) *
-                    (parseInt(rightWrist.x, 10) - 309) -
-                90
+                ((356 - 185) / (185 - 407)) *
+                    (parseInt(rightWrist.x, 10) - 407) -
+                185
         ) < 50
     ) {
         resultRight = "yellow";
@@ -33,8 +33,9 @@ function Evaluation(posesJson) {
     if (
         Math.abs(
             parseInt(leftWrist.y, 10) -
-                ((159 - 90) / (144 - 309)) * (parseInt(leftWrist.x, 10) - 309) -
-                90
+                ((356 - 185) / (185 - 407)) *
+                    (parseInt(leftWrist.x, 10) - 407) -
+                185
         ) < 50
     ) {
         resultLeft = "yellow";
@@ -98,7 +99,6 @@ function edgePoint(posesJson, axis, type) {
         return 0;
     }
 }
-
 function Coordinates(posesJson) {
     try {
         return posesJson.keypoints.map((posesParts, index) => {
@@ -115,15 +115,25 @@ function Coordinates(posesJson) {
 }
 
 function Posture() {
-    const [posesJson, setPosesJson] = useState({ score: 0, keypoints: [] });
+    const [posesJson, setPosesJson] = useState({
+        score: 0,
+        keypoints: [{ position: { x: 0, y: 0 }, part: "null", score: 0 }],
+    });
+
+    const example = useMemo(() => {
+        const image = new Image();
+        image.crossOrigin = "";
+        image.src = require("./assets/images/example.jpg");
+        return image;
+    }, []);
 
     return (
         <div>
             <div class="img-overlay-wrap">
                 <PoseNet
-                    height={300}
-                    width={400}
-                    frameRate={15}
+                    input={example}
+                    height={example.height}
+                    width={example.width}
                     inferenceConfig={{
                         decodingMethod: "single-person",
                         architecture: "MobileNetV1",
@@ -139,7 +149,7 @@ function Posture() {
                         }
                     }}
                 />
-                <svg height={300} width={400}>
+                <svg height={example.height} width={example.width}>
                     <rect
                         x={edgePoint(posesJson, "x", "min")}
                         y={edgePoint(posesJson, "y", "min")}
