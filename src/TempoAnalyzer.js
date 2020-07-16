@@ -38,7 +38,7 @@ class TempoAnalyzer extends Component {
     return (
       <div>
         <div>
-          {this.state.audio ? <AudioAnalyser audio={this.state.audio} /> : ""}
+          {this.state.audio ? <AudioAnalyser audio={this.state.audio} osc={false} his={false}/> : ""}
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button

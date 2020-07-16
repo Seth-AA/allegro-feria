@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AudioAnalyser from "./AudioAnalyser";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Menu from "./Menu";
 
 class Bpm extends Component {
   constructor(props) {
