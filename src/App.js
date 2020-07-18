@@ -2,9 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Bpm from "./bpm";
 import Posture from "./Posture";
+import StaticPosture from "./StaticPosture";
 import { Navbar, Nav } from "react-bootstrap";
-import TempoAnalyzer from "./TempoAnalyzer";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./app.style.css";
 
 export default function App() {
   return (
@@ -25,8 +26,8 @@ export default function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/bpm-finder">Encuentra el BPM</Nav.Link>
-              <Nav.Link href="/tempo-analyzer">Analiza tu tempo</Nav.Link>
               <Nav.Link href="/posture-analyzer">Prueba tu postura</Nav.Link>
+              <Nav.Link href="/posture-static">Prueba estática</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -35,17 +36,16 @@ export default function App() {
             <Bpm />
           </Route>
           <Route path="/tempo-analyzer">
-            <TempoAnalyzer></TempoAnalyzer>
+            <Bpm />
           </Route>
           <Route path="/posture-analyzer">
             <Posture />
+          </Route>
+          <Route path="/posture-static">
+            <StaticPosture />
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }

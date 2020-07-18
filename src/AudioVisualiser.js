@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./bpm.style.css";
 
 class AudioVisualiser extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class AudioVisualiser extends Component {
     return (
       <div>
         <canvas
-          style={{ border: "1px solid black" }}
+          // style={{ border: "1px solid black" }}
           width="400"
           height="300"
           ref={this.canvas}
@@ -18,7 +19,7 @@ class AudioVisualiser extends Component {
     );
   }
   draw() {
-    const { audioData, songData } = this.props;
+    const { audioData } = this.props;
     const canvas = this.canvas.current;
     const height = canvas.height;
     const width = canvas.width;
@@ -30,8 +31,8 @@ class AudioVisualiser extends Component {
     context.lineWidth = 3;
     context.strokeStyle = "#000000";
     context.clearRect(0, 0, width, height);
-    context.beginPath();
     context.moveTo(0, height / 2);
+    context.beginPath();
     // console.log(audioData);
     for (const item of audioData) {
       const y = item * 1.0 * height + height / 2;

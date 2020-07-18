@@ -1,0 +1,13 @@
+.img-overlay-wrap {
+    position: relative;
+    display: inline-block; /* <= shrinks container to image size */
+    transition: transform 150ms ease-in-out;
+    border: 5px solid purple;
+}
+
+.img-overlay-wrap svg {
+    position: absolute;
+    top: 5.5%;
+    left: 3.5%;
+    border: 5px solid blue;
+}

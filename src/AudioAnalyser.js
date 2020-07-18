@@ -7,7 +7,7 @@ class AudioAnalyser extends Component {
     super(props);
     this.state = {
       audioData: new Uint8Array(0),
-      songData: [],
+      // songData: [],
       bpm: [0],
       currentBPM: 0,
       historial: true,
@@ -113,24 +113,21 @@ class AudioAnalyser extends Component {
       this.state.bpm.slice(-20).reduce(reducer) /
         Math.min(20, this.state.bpm.length)
     );
-    const diff = Math.round(this.state.currentBPM - average);
+    var diff = (this.state.currentBPM - average);
     function clamp(num, min, max) {
       return num <= min ? min : num >= max ? max : num;
     }
-    const percent = clamp(40 - diff / 2, 0, 100);
-    const text = [
-      "muy rapido",
-      "rapido",
-      "un poco rapido",
-      "constante",
-      "un poco lento",
-      "lento",
-      "muy lento",
-    ].reverse();
-    const selected = text[Math.floor(((diff + 100) / 200) * text.length)];
+    const percent = clamp(48 - diff, 0, 100);
+    const images = [
+      require("./assets/images/bunny.gif"),
+      require("./assets/images/good_mark.gif"),
+      require("./assets/images/turtle.png"),
+    ];
+    const image = diff > 10 ? images[0] : diff < -10 ? images[2] : images[1];
+    diff = Math.round(diff)
     return (
-      <div className="flex-row">
-        <div>
+      <div className="flex-row boxed">
+        <div className="">
           {this.state.oscilograma ? (
             <AudioVisualiser audioData={this.state.audioData} />
           ) : (
@@ -139,20 +136,23 @@ class AudioAnalyser extends Component {
         </div>
 
         {this.state.historial ? (
-          <div className="flex-row" style={{ width: "40%" }}>
+          <div
+            className="flex-row boxed panel-history"
+            style={{ width: "35%", height: "380px" }}
+          >
             {this.state.bpm
               .slice(-20)
               .reverse()
               .map((number, index) => (
-                <div className="bpm-info">{number}</div>
+                <div className="bpm-info boxed history">{number}</div>
               ))}
           </div>
         ) : (
-          <div></div>
+          ""
         )}
         {this.state.showBpm ? (
           <div
-            className="current-bpm"
+            className="current-bpm "
             style={{
               animation: `pulse ${60 / this.state.currentBPM}s infinite`,
             }}
@@ -168,16 +168,17 @@ class AudioAnalyser extends Component {
             style={{
               position: "relative",
               left: `${percent}%`,
-              // width: "auto",
               display: "inline-block",
               textAlign: "center",
               height: "auto",
-              fontSize: "40px",
-              backgroundColor: "red",
             }}
           >
-            {" "}
-            {diff} {selected}
+            <img
+              width="50px"
+              height="50px"
+              src={image}
+              alt="Italian Trulli"
+            ></img>
           </div>
         </div>
       </div>

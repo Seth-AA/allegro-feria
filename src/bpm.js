@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import AudioAnalyser from "./AudioAnalyser";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Menu from "./Menu";
 
 class Bpm extends Component {
   constructor(props) {
@@ -43,6 +42,7 @@ class Bpm extends Component {
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
+            style={{ margin: "10px" }}
             variant="success"
             onClick={this.getMicrophone}
             disabled={this.state.audio}
@@ -50,6 +50,7 @@ class Bpm extends Component {
             Grabar
           </Button>
           <Button
+            style={{ margin: "10px" }}
             variant="danger"
             onClick={this.stopMicrophone}
             disabled={!this.state.audio}
