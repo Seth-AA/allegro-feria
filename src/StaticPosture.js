@@ -3,57 +3,55 @@ import PoseNet from "react-posenet";
 import "./Posture.css";
 import { edgePoint, Coordinates, drawSkeleton } from "./Posture_utils.js";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function Evaluation(posesJson) {
-    var resultRight;
-    var resultLeft;
-    var leftWrist;
-    var rightWrist;
+  var resultRight;
+  var resultLeft;
+  var leftWrist;
+  var rightWrist;
 
-    try {
-        const Points = posesJson.keypoints.filter((part) => {
-            return part.part == "leftWrist" || part.part == "rightWrist";
-        });
-        leftWrist = Points[0].position;
-        rightWrist = Points[1].position;
-    } catch (error) {
-        return "black";
-    }
+  try {
+    const Points = posesJson.keypoints.filter((part) => {
+      return part.part == "leftWrist" || part.part == "rightWrist";
+    });
+    leftWrist = Points[0].position;
+    rightWrist = Points[1].position;
+  } catch (error) {
+    return "black";
+  }
 
-    if (
-        Math.abs(
-            parseInt(rightWrist.y, 10) -
-                ((356 - 185) / (185 - 407)) *
-                    (parseInt(rightWrist.x, 10) - 407) -
-                185
-        ) < 50
-    ) {
-        resultRight = "yellow";
-    } else {
-        resultRight = "red";
-    }
-    if (
-        Math.abs(
-            parseInt(leftWrist.y, 10) -
-                ((356 - 185) / (185 - 407)) *
-                    (parseInt(leftWrist.x, 10) - 407) -
-                185
-        ) < 50
-    ) {
-        resultLeft = "yellow";
-    } else {
-        resultLeft = "red";
-    }
+  if (
+    Math.abs(
+      parseInt(rightWrist.y, 10) -
+        ((356 - 185) / (185 - 407)) * (parseInt(rightWrist.x, 10) - 407) -
+        185
+    ) < 50
+  ) {
+    resultRight = "yellow";
+  } else {
+    resultRight = "red";
+  }
+  if (
+    Math.abs(
+      parseInt(leftWrist.y, 10) -
+        ((356 - 185) / (185 - 407)) * (parseInt(leftWrist.x, 10) - 407) -
+        185
+    ) < 50
+  ) {
+    resultLeft = "yellow";
+  } else {
+    resultLeft = "red";
+  }
 
-    if (resultLeft == "yellow" || resultRight == "yellow") {
-        if (resultLeft == resultRight) {
-            return "green";
-        }
-        return "yellow";
+  if (resultLeft == "yellow" || resultRight == "yellow") {
+    if (resultLeft == resultRight) {
+      return "green";
     }
-    return "red";
+    return "yellow";
+  }
+  return "red";
 }
 
 function correctPos(point, x1, y1, x2, y2) {
@@ -138,12 +136,12 @@ function Posture() {
         keypoints: [{ position: { x: 0, y: 0 }, part: "correct", score: 0 }],
     });
 
-    const example = useMemo(() => {
-        const image = new Image();
-        image.crossOrigin = "";
-        image.src = require("./assets/images/example.jpg");
-        return image;
-    }, []);
+  const example = useMemo(() => {
+    const image = new Image();
+    image.crossOrigin = "";
+    image.src = require("./assets/images/example.jpg");
+    return image;
+  }, []);
 
     const [posesImage, setPosesImage] = useState(example);
 

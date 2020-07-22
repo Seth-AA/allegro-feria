@@ -3,7 +3,7 @@ import AudioAnalyser from "./AudioAnalyser";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-class Bpm extends Component {
+class TempoAnalyzer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,11 +38,10 @@ class Bpm extends Component {
     return (
       <div>
         <div>
-          {this.state.audio ? <AudioAnalyser audio={this.state.audio} /> : ""}
+          {this.state.audio ? <AudioAnalyser audio={this.state.audio} osc={false} his={false}/> : ""}
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
-            style={{ margin: "10px" }}
             variant="success"
             onClick={this.getMicrophone}
             disabled={this.state.audio}
@@ -50,7 +49,6 @@ class Bpm extends Component {
             Grabar
           </Button>
           <Button
-            style={{ margin: "10px" }}
             variant="danger"
             onClick={this.stopMicrophone}
             disabled={!this.state.audio}
@@ -63,4 +61,4 @@ class Bpm extends Component {
   }
 }
 
-export default Bpm;
+export default TempoAnalyzer;
