@@ -1,80 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import PoseNet from "react-posenet";
 import "./Posture.css";
-import { edgePoint, Coordinates, drawSkeleton } from "./Posture_utils.js";
-
-function Evaluation(posesJson) {
-    var resultRight;
-    var resultLeft;
-    var leftWrist;
-    var rightWrist;
-
-    try {
-        const Points = posesJson.keypoints.filter((part) => {
-            return part.part == "leftWrist" || part.part == "rightWrist";
-        });
-        leftWrist = Points[0].position;
-        rightWrist = Points[1].position;
-    } catch (error) {
-        return "black";
-    }
-
-    if (
-        Math.abs(
-            parseInt(rightWrist.y, 10) -
-                ((159 - 90) / (144 - 309)) *
-                    (parseInt(rightWrist.x, 10) - 309) -
-                90
-        ) < 50
-    ) {
-        resultRight = "yellow";
-    } else {
-        resultRight = "red";
-    }
-    if (
-        Math.abs(
-            parseInt(leftWrist.y, 10) -
-                ((159 - 90) / (144 - 309)) * (parseInt(leftWrist.x, 10) - 309) -
-                90
-        ) < 50
-    ) {
-        resultLeft = "yellow";
-    } else {
-        resultLeft = "red";
-    }
-
-    if (resultLeft == "yellow" || resultRight == "yellow") {
-        if (resultLeft == resultRight) {
-            return "green";
-        }
-        return "yellow";
-    }
-    return "red";
-}
-
-function correctPos(point, x1, y1, x2, y2) {
-    var m1 = (y2 - y1) / (x2 - x1);
-    var n1 = y1 - m1 * x1;
-
-    var m2 = -1 / m1;
-    var n2;
-
-    var x;
-    var y;
-
-    n2 = parseInt(point.position.y, 10) - m2 * parseInt(point.position.x, 10);
-
-    x = Math.min((n1 - n2) / (m2 - m1), 399);
-    y = Math.min((m2 * (n1 - n2)) / (m2 - m1) + n2, 299);
-
-    const correctPoint = {
-        position: { x, y },
-        part: point.part,
-        score: point.score,
-    };
-
-    return correctPoint;
-}
+import {
+    edgePoint,
+    Coordinates,
+    drawSkeleton,
+    Evaluation,
+    correctPos,
+} from "./Posture_utils.js";
 
 function correctPoints(posesJson) {
     const points = posesJson.keypoints;
@@ -82,39 +15,34 @@ function correctPoints(posesJson) {
         score: posesJson.score,
         keypoints: [],
     };
-
     points.forEach((element, index) => {
-        if (element.part == "rightWrist") {
+        if (element.part == "leftWrist") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightWrist";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 309, 90, 144, 159)
-            );
-        } else if (element.part == "leftWrist") {
-            correctPoints.keypoints.push(
-                correctPos(element, 309, 90, 144, 159)
+                correctPos(point1[0], element, 310, 190, 202, 242)
             );
         } else if (element.part == "leftElbow") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightElbow";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 282, 164, 68, 165)
-            );
-        } else if (element.part == "rightElbow") {
-            correctPoints.keypoints.push(
-                correctPos(element, 282, 164, 68, 165)
+                correctPos(point1[0], element, 276, 236, 144, 217)
             );
         } else if (element.part == "leftKnee") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightKnee";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 266, 186, 242, 230)
+                correctPos(point1[0], element, 354, 362, 79, 514)
             );
         } else if (element.part == "leftAnkle") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightAnkle";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 266, 186, 242, 230)
-            );
-        } else if (element.part == "rightKnee") {
-            correctPoints.keypoints.push(
-                correctPos(element, 60, 257, 126, 262)
-            );
-        } else if (element.part == "rightAnkle") {
-            correctPoints.keypoints.push(
-                correctPos(element, 60, 257, 126, 262)
+                correctPos(point1[0], element, 323, 574, 168, 655)
             );
         } else {
             correctPoints.keypoints.push(element);
@@ -123,6 +51,7 @@ function correctPoints(posesJson) {
 
     return correctPoints;
 }
+
 function Posture() {
     const [posesJson, setPosesJson] = useState({ score: 0, keypoints: [] });
 
@@ -132,18 +61,30 @@ function Posture() {
     });
 
     const [skeletonWatch, setSkeletonWatch] = useState(false);
+    const [skeletonSuges, setSkeletonSuges] = useState(false);
+
+    const [detalles, setDetalles] = useState(false);
 
     const canvasRef = useRef(null);
     const correctRef = useRef(1);
 
-    const handleSkeleton = (width, height) => {
+    const handleSkeleton = () => {
         var checkBox = document.getElementById("skeletonCheck");
         if (checkBox.checked == true) {
             setSkeletonWatch(true);
         } else {
             canvasRef.current.getContext("2d").clearRect(0, 0, 400, 300);
-            correctRef.current.getContext("2d").clearRect(0, 0, 400, 300);
             setSkeletonWatch(false);
+        }
+    };
+
+    const handleSuges = () => {
+        var checkBox = document.getElementById("sugesCheck");
+        if (checkBox.checked == true) {
+            setSkeletonSuges(true);
+        } else {
+            correctRef.current.getContext("2d").clearRect(0, 0, 400, 300);
+            setSkeletonSuges(false);
         }
     };
 
@@ -157,17 +98,19 @@ function Posture() {
                     400,
                     300
                 );
-                drawSkeleton(
-                    correctPosesJson.keypoints,
-                    0.5,
-                    correctRef.current.getContext("2d"),
-                    400,
-                    300,
-                    "orange"
-                );
             } catch (error) {
                 void 0;
             }
+        }
+        if (skeletonSuges == true) {
+            drawSkeleton(
+                correctPosesJson.keypoints,
+                0.5,
+                correctRef.current.getContext("2d"),
+                400,
+                300,
+                "orange"
+            );
         }
     });
 
@@ -195,7 +138,7 @@ function Posture() {
                         }
                     }}
                 />
-                <svg height={400} width={300}>
+                <svg width={400} height={300}>
                     <rect
                         x={edgePoint(posesJson, "x", "min")}
                         y={edgePoint(posesJson, "y", "min")}
@@ -208,7 +151,7 @@ function Posture() {
                             edgePoint(posesJson, "y", "min")
                         }
                         fill="None"
-                        stroke={Evaluation(posesJson)}
+                        stroke={Evaluation(posesJson, correctPosesJson)}
                         stroke-width={5}
                     />
                 </svg>
@@ -228,11 +171,36 @@ function Posture() {
                         }}
                     />
                     <label className="custom-control-label" for="skeletonCheck">
-                        Mostrar esqueleto
+                        Marcar postura propia
                     </label>
                 </div>
-                <h4>Partes identificadas:</h4>
-                {Coordinates(posesJson)}
+                <div className="custom-control custom-checkbox">
+                    <input
+                        className="custom-control-input"
+                        type="checkbox"
+                        id="sugesCheck"
+                        onClick={(e) => {
+                            handleSuges(400, 300);
+                        }}
+                    />
+                    <label className="custom-control-label" for="sugesCheck">
+                        Mostrar sugerencia
+                    </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                    <input
+                        className="custom-control-input"
+                        type="checkbox"
+                        id="detallesCheck"
+                        onClick={(e) => {
+                            setDetalles(!detalles);
+                        }}
+                    />
+                    <label className="custom-control-label" for="detallesCheck">
+                        Mostrar detalles
+                    </label>
+                </div>
+                {detalles ? Coordinates(posesJson) : ""}
             </div>
         </div>
     );

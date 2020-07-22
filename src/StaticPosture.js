@@ -1,82 +1,15 @@
 import React, { useState, useMemo, useRef } from "react";
 import PoseNet from "react-posenet";
 import "./Posture.css";
-import { edgePoint, Coordinates, drawSkeleton } from "./Posture_utils.js";
+import {
+    edgePoint,
+    Coordinates,
+    drawSkeleton,
+    Evaluation,
+    correctPos,
+} from "./Posture_utils.js";
 
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min";
-
-function Evaluation(posesJson) {
-  var resultRight;
-  var resultLeft;
-  var leftWrist;
-  var rightWrist;
-
-  try {
-    const Points = posesJson.keypoints.filter((part) => {
-      return part.part == "leftWrist" || part.part == "rightWrist";
-    });
-    leftWrist = Points[0].position;
-    rightWrist = Points[1].position;
-  } catch (error) {
-    return "black";
-  }
-
-  if (
-    Math.abs(
-      parseInt(rightWrist.y, 10) -
-        ((356 - 185) / (185 - 407)) * (parseInt(rightWrist.x, 10) - 407) -
-        185
-    ) < 50
-  ) {
-    resultRight = "yellow";
-  } else {
-    resultRight = "red";
-  }
-  if (
-    Math.abs(
-      parseInt(leftWrist.y, 10) -
-        ((356 - 185) / (185 - 407)) * (parseInt(leftWrist.x, 10) - 407) -
-        185
-    ) < 50
-  ) {
-    resultLeft = "yellow";
-  } else {
-    resultLeft = "red";
-  }
-
-  if (resultLeft == "yellow" || resultRight == "yellow") {
-    if (resultLeft == resultRight) {
-      return "green";
-    }
-    return "yellow";
-  }
-  return "red";
-}
-
-function correctPos(point, x1, y1, x2, y2) {
-    var m1 = (y2 - y1) / (x2 - x1);
-    var n1 = y1 - m1 * x1;
-
-    var m2 = -1 / m1;
-    var n2;
-
-    var x;
-    var y;
-
-    n2 = parseInt(point.position.y, 10) - m2 * parseInt(point.position.x, 10);
-
-    x = (n1 - n2) / (m2 - m1);
-    y = (m2 * (n1 - n2)) / (m2 - m1) + n2;
-
-    const correctPoint = {
-        position: { x, y },
-        part: point.part,
-        score: point.score,
-    };
-
-    return correctPoint;
-}
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function correctPoints(posesJson) {
     const points = posesJson.keypoints;
@@ -84,39 +17,34 @@ function correctPoints(posesJson) {
         score: posesJson.score,
         keypoints: [],
     };
-
     points.forEach((element, index) => {
-        if (element.part == "rightWrist") {
+        if (element.part == "leftWrist") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightWrist";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 407, 185, 185, 356)
-            );
-        } else if (element.part == "leftWrist") {
-            correctPoints.keypoints.push(
-                correctPos(element, 407, 185, 185, 356)
+                correctPos(point1[0], element, 398, 232, 185, 356)
             );
         } else if (element.part == "leftElbow") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightElbow";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 376, 329, 90, 330)
-            );
-        } else if (element.part == "rightElbow") {
-            correctPoints.keypoints.push(
-                correctPos(element, 376, 329, 90, 330)
+                correctPos(point1[0], element, 376, 329, 90, 330)
             );
         } else if (element.part == "leftKnee") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightKnee";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 354, 372, 323, 574)
+                correctPos(point1[0], element, 354, 402, 79, 514)
             );
         } else if (element.part == "leftAnkle") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightAnkle";
+            });
             correctPoints.keypoints.push(
-                correctPos(element, 354, 372, 323, 574)
-            );
-        } else if (element.part == "rightKnee") {
-            correctPoints.keypoints.push(
-                correctPos(element, 79, 514, 168, 655)
-            );
-        } else if (element.part == "rightAnkle") {
-            correctPoints.keypoints.push(
-                correctPos(element, 79, 514, 168, 655)
+                correctPos(point1[0], element, 333, 584, 168, 655)
             );
         } else {
             correctPoints.keypoints.push(element);
@@ -136,15 +64,16 @@ function Posture() {
         keypoints: [{ position: { x: 0, y: 0 }, part: "correct", score: 0 }],
     });
 
-  const example = useMemo(() => {
-    const image = new Image();
-    image.crossOrigin = "";
-    image.src = require("./assets/images/example.jpg");
-    return image;
-  }, []);
+    const [detalles, setDetalles] = useState(false);
+
+    const example = useMemo(() => {
+        const image = new Image();
+        image.crossOrigin = "";
+        image.src = require("./assets/images/example.jpg");
+        return image;
+    }, []);
 
     const [posesImage, setPosesImage] = useState(example);
-
     const [selectedImage, setSelectedImage] = useState("Seleccione una imagen");
 
     const handleChange = (e) => {
@@ -169,6 +98,13 @@ function Posture() {
                 witdh,
                 height
             );
+        } else {
+            canvasRef.current.getContext("2d").clearRect(0, 0, 500, 750);
+        }
+    };
+    const handleSuges = (witdh, height) => {
+        var checkBox = document.getElementById("sugesCheck");
+        if (checkBox.checked == true) {
             drawSkeleton(
                 correctPosesJson.keypoints,
                 0.5,
@@ -178,7 +114,6 @@ function Posture() {
                 "orange"
             );
         } else {
-            canvasRef.current.getContext("2d").clearRect(0, 0, 500, 750);
             correctRef.current.getContext("2d").clearRect(0, 0, 500, 750);
         }
     };
@@ -223,7 +158,7 @@ function Posture() {
                             edgePoint(posesJson, "y", "min")
                         }
                         fill="None"
-                        stroke={Evaluation(posesJson)}
+                        stroke={Evaluation(posesJson, correctPosesJson)}
                         stroke-width={5}
                     />
                 </svg>
@@ -254,11 +189,36 @@ function Posture() {
                         }}
                     />
                     <label className="custom-control-label" for="skeletonCheck">
-                        Mostrar esqueleto
+                        Marcar postura propia
                     </label>
                 </div>
-                <h4>Partes identificadas:</h4>
-                {Coordinates(posesJson)}
+                <div className="custom-control custom-checkbox">
+                    <input
+                        className="custom-control-input"
+                        type="checkbox"
+                        id="sugesCheck"
+                        onClick={(e) => {
+                            handleSuges(500, 750);
+                        }}
+                    />
+                    <label className="custom-control-label" for="sugesCheck">
+                        Mostrar sugerencia
+                    </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                    <input
+                        className="custom-control-input"
+                        type="checkbox"
+                        id="detallesCheck"
+                        onClick={(e) => {
+                            setDetalles(!detalles);
+                        }}
+                    />
+                    <label className="custom-control-label" for="detallesCheck">
+                        Mostrar detalles
+                    </label>
+                </div>
+                {detalles ? Coordinates(posesJson) : ""}
             </div>
         </div>
     );

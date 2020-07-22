@@ -1,7 +1,7 @@
 import React from "react";
 
 const defaultcolor = "aqua";
-const lineWidth = 2;
+const lineWidth = 4;
 
 const connectedPartNames = [
     ["leftHip", "leftShoulder"],
@@ -143,4 +143,88 @@ export function drawSkeleton(
             ctx
         );
     });
+}
+
+function distance(x1, y1, x2, y2) {
+    return Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), 0.5);
+}
+
+export function Evaluation(posesJson, correctPosesJson) {
+    try {
+        var error = 0.0;
+        var errorEval = "black";
+        var no_yel_flag = true;
+        var no_red_flag = true;
+        var lw = false;
+        var rw = false;
+        var le = false;
+        var re = false;
+        posesJson.keypoints.forEach((part, index) => {
+            error = 0.0;
+            if (part.part == "leftWrist") {
+                lw = true;
+                error = -10;
+            }
+            if (part.part == "rightWrist") {
+                rw = true;
+            }
+            if (part.part == "leftElbow") {
+                le = true;
+            }
+            if (part.part == "rightElbow") {
+                re = true;
+            }
+            error =
+                error +
+                distance(
+                    part.position.x,
+                    part.position.y,
+                    correctPosesJson.keypoints[index].position.x,
+                    correctPosesJson.keypoints[index].position.y
+                );
+            if (error > 100) {
+                errorEval = "red";
+                no_red_flag = false;
+            }
+            if (error > 50 && no_red_flag) {
+                errorEval = "yellow";
+                no_yel_flag = false;
+            }
+            if (error < 50 && no_red_flag && no_yel_flag) {
+                errorEval = "green";
+            }
+        });
+        if (lw && rw && le && re) {
+            return errorEval;
+        } else return "black";
+    } catch (error) {
+        return "black";
+    }
+}
+
+export function correctPos(partLeft, partRight, x1, y1, x2, y2) {
+    const m1 = (y2 - y1) / (x2 - x1);
+    //var n1 = y1 - m1 * x1;
+
+    //var m2 = -1 / m1;
+    //var n2;
+    const R = distance(
+        partLeft.position.x,
+        partLeft.position.y,
+        partRight.position.x,
+        partRight.position.y
+    );
+    const x = partLeft.position.x + R * Math.cos(Math.atan(m1));
+    const y = partLeft.position.y + R * Math.sin(Math.atan(m1));
+    //n2 = parseInt(point.position.y, 10) - m2 * parseInt(point.position.x, 10);
+    //x = (n1 - n2) / (m2 - m1);
+    //y = (m2 * (n1 - n2)) / (m2 - m1) + n2;
+
+    const correctPoint2 = {
+        position: { x, y },
+        part: partRight.part,
+        score: 1,
+    };
+
+    return correctPoint2;
 }
