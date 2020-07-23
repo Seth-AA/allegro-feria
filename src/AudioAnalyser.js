@@ -200,7 +200,7 @@ class AudioAnalyser extends Component {
                         }}
                     >
                         {this.state.bpm
-                            .slice(-10)
+                            .slice(-12)
                             .reverse()
                             .map((number, index) => (
                                 <div className="bpm-info history">{number}</div>
