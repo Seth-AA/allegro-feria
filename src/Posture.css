@@ -6,8 +6,8 @@
 
 .img-overlay-wrap svg {
     position: absolute;
-    top: 5.5%;
-    left: 3.5%;
+    top: 8.5%;
+    left: 3.5% !important;
 }
 
 .img-overlay-wrap canvas {
@@ -20,12 +20,29 @@
     float: left;
 }
 
-.pretty_container {
-    border-radius: 5px;
-    background-color: #f8f9fa;
-    margin: 10px;
+.pose {
+    background: #1f447b;
+    border-radius: 10px;
+}
+
+.pretty_container_left {
+    background: #1f447b;
+    margin: 20px 40px 20px 40px;
     padding: 15px;
-    box-shadow: 2px 2px 2px lightgrey;
+    height: 670px;
+    border-radius: 10px;
+}
+.pretty_container_center {
+    background: #1f447b;
+    margin: 20px 0px 20px 0px;
+    height: 670px;
+    border-radius: 10px;
+}
+.pretty_container_right {
+    background: #1f447b;
+    margin: 20px 40px 20px 40px;
+    height: 670px;
+    border-radius: 10px;
 }
 .container {
     display: block;
@@ -33,7 +50,7 @@
     padding-left: 35px;
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 22px;
+    font-size: medium;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -66,7 +83,7 @@
 
 /* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
-    background-color: #2196f3;
+    background-color: #82c0ff;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

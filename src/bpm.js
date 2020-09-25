@@ -45,7 +45,7 @@ class Bpm extends Component {
                     )}
                 </div>
                 <div
-                    className="col-4"
+                    className="col-6"
                     style={{
                         display: "flex",
                         justifyContent: "center",

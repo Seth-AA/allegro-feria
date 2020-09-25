@@ -9,6 +9,8 @@ import {
     correctPos,
 } from "./Posture_utils.js";
 
+import { Container, Row, Col } from "react-bootstrap";
+
 function correctPoints(posesJson) {
     const points = posesJson.keypoints;
     var correctPoints = {
@@ -53,6 +55,9 @@ function correctPoints(posesJson) {
 }
 
 function Posture() {
+    const H = 525;
+    const W = 700;
+
     const [posesJson, setPosesJson] = useState({ score: 0, keypoints: [] });
 
     const [correctPosesJson, setCorrectPosesJson] = useState({
@@ -73,7 +78,7 @@ function Posture() {
         if (checkBox.checked == true) {
             setSkeletonWatch(true);
         } else {
-            canvasRef.current.getContext("2d").clearRect(0, 0, 400, 300);
+            canvasRef.current.getContext("2d").clearRect(0, 0, W, H);
             setSkeletonWatch(false);
         }
     };
@@ -83,7 +88,7 @@ function Posture() {
         if (checkBox.checked == true) {
             setSkeletonSuges(true);
         } else {
-            correctRef.current.getContext("2d").clearRect(0, 0, 400, 300);
+            correctRef.current.getContext("2d").clearRect(0, 0, W, H);
             setSkeletonSuges(false);
         }
     };
@@ -95,8 +100,8 @@ function Posture() {
                     posesJson.keypoints,
                     0.5,
                     canvasRef.current.getContext("2d"),
-                    400,
-                    300
+                    W,
+                    H
                 );
             } catch (error) {
                 void 0;
@@ -107,102 +112,126 @@ function Posture() {
                 correctPosesJson.keypoints,
                 0.5,
                 correctRef.current.getContext("2d"),
-                400,
-                300,
+                W,
+                H,
                 "orange"
             );
         }
     });
 
     return (
-        <div>
-            <div class="img-overlay-wrap">
-                <PoseNet
-                    height={300}
-                    width={400}
-                    frameRate={15}
-                    inferenceConfig={{
-                        decodingMethod: "single-person",
-                        architecture: "MobileNetV1",
-                        outputStride: 16,
-                        multiplier: 0.5,
-                        quantBytes: 1,
-                    }}
-                    onEstimate={(poses) => {
-                        try {
-                            setPosesJson(poses[0]);
-                            setCorrectPosesJson(correctPoints(poses[0]));
-                        } catch (error) {
-                            setPosesJson({ score: 0, keypoints: [] });
-                            setCorrectPosesJson({ score: 0, keypoints: [] });
-                        }
-                    }}
-                />
-                <svg width={400} height={300}>
-                    <rect
-                        x={edgePoint(posesJson, "x", "min")}
-                        y={edgePoint(posesJson, "y", "min")}
-                        width={
-                            edgePoint(posesJson, "x", "max") -
-                            edgePoint(posesJson, "x", "min")
-                        }
-                        height={
-                            edgePoint(posesJson, "y", "max") -
-                            edgePoint(posesJson, "y", "min")
-                        }
-                        fill="None"
-                        stroke={Evaluation(posesJson, correctPosesJson)}
-                        stroke-width={5}
-                    />
-                </svg>
-                <canvas ref={canvasRef} width={400} height={300} />
-                <canvas ref={correctRef} width={400} height={300} />
-            </div>
-
-            <div className="pretty_container options">
-                <h4>Opciones</h4>
-                <div className="custom-control custom-checkbox">
-                    <input
-                        className="custom-control-input"
-                        type="checkbox"
-                        id="skeletonCheck"
-                        onClick={(e) => {
-                            handleSkeleton(400, 300);
-                        }}
-                    />
-                    <label className="custom-control-label" for="skeletonCheck">
-                        Marcar postura propia
-                    </label>
-                </div>
-                <div className="custom-control custom-checkbox">
-                    <input
-                        className="custom-control-input"
-                        type="checkbox"
-                        id="sugesCheck"
-                        onClick={(e) => {
-                            handleSuges(400, 300);
-                        }}
-                    />
-                    <label className="custom-control-label" for="sugesCheck">
-                        Mostrar sugerencia
-                    </label>
-                </div>
-                <div className="custom-control custom-checkbox">
-                    <input
-                        className="custom-control-input"
-                        type="checkbox"
-                        id="detallesCheck"
-                        onClick={(e) => {
-                            setDetalles(!detalles);
-                        }}
-                    />
-                    <label className="custom-control-label" for="detallesCheck">
-                        Mostrar detalles
-                    </label>
-                </div>
-                {detalles ? Coordinates(posesJson) : ""}
-            </div>
-        </div>
+        <Container fluid>
+            <Row>
+                <Col md={3}>
+                    <div className="pretty_container_left">
+                        <h4>Opciones</h4>
+                        <div className="custom-control custom-checkbox">
+                            <input
+                                className="custom-control-input"
+                                type="checkbox"
+                                id="skeletonCheck"
+                                onClick={(e) => {
+                                    handleSkeleton(W, H);
+                                }}
+                            />
+                            <label
+                                className="custom-control-label"
+                                for="skeletonCheck"
+                            >
+                                Marcar postura propia
+                            </label>
+                        </div>
+                        <div className="custom-control custom-checkbox">
+                            <input
+                                className="custom-control-input"
+                                type="checkbox"
+                                id="sugesCheck"
+                                onClick={(e) => {
+                                    handleSuges(W, H);
+                                }}
+                            />
+                            <label
+                                className="custom-control-label"
+                                for="sugesCheck"
+                            >
+                                Mostrar sugerencia
+                            </label>
+                        </div>
+                        <div className="custom-control custom-checkbox">
+                            <input
+                                className="custom-control-input"
+                                type="checkbox"
+                                id="detallesCheck"
+                                onClick={(e) => {
+                                    setDetalles(!detalles);
+                                }}
+                            />
+                            <label
+                                className="custom-control-label"
+                                for="detallesCheck"
+                            >
+                                Mostrar detalles
+                            </label>
+                        </div>
+                    </div>
+                </Col>
+                <Col md={6}>
+                    <div className="pretty_container_center img-overlay-wrap pose">
+                        <PoseNet
+                            height={H}
+                            width={W}
+                            frameRate={15}
+                            inferenceConfig={{
+                                decodingMethod: "single-person",
+                                architecture: "MobileNetV1",
+                                outputStride: 16,
+                                multiplier: 0.5,
+                                quantBytes: 1,
+                            }}
+                            onEstimate={(poses) => {
+                                try {
+                                    setPosesJson(poses[0]);
+                                    setCorrectPosesJson(
+                                        correctPoints(poses[0])
+                                    );
+                                } catch (error) {
+                                    setPosesJson({ score: 0, keypoints: [] });
+                                    setCorrectPosesJson({
+                                        score: 0,
+                                        keypoints: [],
+                                    });
+                                }
+                            }}
+                        />
+                        <svg width={W} height={H}>
+                            <rect
+                                x={edgePoint(posesJson, "x", "min")}
+                                y={edgePoint(posesJson, "y", "min")}
+                                width={
+                                    edgePoint(posesJson, "x", "max") -
+                                    edgePoint(posesJson, "x", "min")
+                                }
+                                height={
+                                    edgePoint(posesJson, "y", "max") -
+                                    edgePoint(posesJson, "y", "min")
+                                }
+                                fill="None"
+                                stroke={Evaluation(posesJson, correctPosesJson)}
+                                stroke-width={5}
+                            />
+                        </svg>
+                        <canvas ref={canvasRef} width={W} height={H} />
+                        <canvas ref={correctRef} width={W} height={H} />
+                    </div>
+                </Col>
+                <Col md={3}>
+                    <div className="pretty_container_right">
+                        {" "}
+                        {detalles ? Coordinates(posesJson) : ""}
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

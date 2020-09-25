@@ -6,32 +6,25 @@ import StaticPosture from "./StaticPosture";
 import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.style.css";
+require("typeface-poppins");
 
 export default function App() {
     return (
         <Router>
             <div>
-                <Navbar bg="#dfe6e9" variant="light">
-                    <Navbar.Brand href="#home">
-                        <img
-                            alt=""
-                            src={require("./assets/images/guitar.svg")}
-                            width="30"
-                            height="30"
-                            className="d-inline-block align-top"
-                        />{" "}
-                        Allegro
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar>
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link href="/bpm-finder">
-                                Encuentra el BPM
+                        <Nav className="mr-auto navo">
+                            <h2>Allegro Training</h2>
+                        </Nav>
+                        <Nav>
+                            <Nav.Link href="/bpm-finder" className="navi">
+                                Ritmo
                             </Nav.Link>
-                            <Nav.Link href="/posture-analyzer">
-                                Prueba tu postura
+                            <Nav.Link href="/posture-analyzer" className="navi">
+                                Postura
                             </Nav.Link>
-                            <Nav.Link href="/posture-static">
+                            <Nav.Link href="/posture-static" className="navi">
                                 Prueba estática
                             </Nav.Link>
                         </Nav>

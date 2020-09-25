@@ -123,23 +123,23 @@ class AudioAnalyser extends Component {
         function clamp(num, min, max) {
             return num <= min ? min : num >= max ? max : num;
         }
-        const percent = clamp(48 - diff, 0, 100);
+        const percent = clamp(46 - diff, 0, 100);
         const images = [
-            require("./assets/images/bunny.gif"),
-            require("./assets/images/good_mark.gif"),
-            require("./assets/images/turtle.png"),
+            require("./assets/images/turtle.svg"),
+            require("./assets/images/rabbit.svg"),
+            require("./assets/images/ok.svg"),
         ];
         const image =
-            diff > 10 ? images[0] : diff < -10 ? images[2] : images[1];
+            diff > 10 ? images[0] : diff < -10 ? images[1] : images[2];
         const imageState =
             diff > 10
-                ? "Estas acelerando"
-                : diff < -10
                 ? "Estas frenando"
+                : diff < -10
+                ? "Estas acelerando"
                 : "Bien!";
         diff = Math.round(diff);
         return (
-            <div className="col-4 boxed" style={{ margin: "0 auto" }}>
+            <div className="col-6 boxed" style={{ margin: "0 auto" }}>
                 {this.state.showBpm ? (
                     <div
                         className="current-bpm"
@@ -160,7 +160,7 @@ class AudioAnalyser extends Component {
                     ""
                 )}
 
-                <div className="medidor" style={{ width: "100%" }}>
+                <div className="medidor">
                     <div
                         className="outline"
                         style={{
@@ -191,14 +191,7 @@ class AudioAnalyser extends Component {
                     )}
                 </div>
                 {this.state.historial ? (
-                    <div
-                        className="flex-row boxed panel-history"
-                        style={{
-                            width: "100%",
-                            height: "100px",
-                            borderRadius: "5px !important",
-                        }}
-                    >
+                    <div className="flex-row boxed panel-history">
                         {this.state.bpm
                             .slice(-12)
                             .reverse()
