@@ -55,8 +55,8 @@ function correctPoints(posesJson) {
 }
 
 function Posture() {
-    const H = 525;
-    const W = 700;
+    const [H, setH] = useState(465);
+    const [W, setW] = useState(620);
 
     const [posesJson, setPosesJson] = useState({ score: 0, keypoints: [] });
 
