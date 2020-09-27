@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Bpm from "./bpm";
 import PosPractice from "./PosPractice";
 import StaticPosture from "./StaticPosture";
+import Footer from "./Footer";
 import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.style.css";
@@ -15,7 +16,7 @@ export default function App() {
                 <Navbar>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto navo">
-                            <h2>Allegro Training</h2>
+                            <img src="/img/allegrowhite.svg" width="50%" />
                         </Nav>
                         <Nav>
                             <Nav.Link href="/posture-analyzer" className="navi">
@@ -31,9 +32,6 @@ export default function App() {
                     </Navbar.Collapse>
                 </Navbar>
                 <Switch>
-                    <Route path="/">
-                        <PosPractice />
-                    </Route>
                     <Route path="/bpm-finder">
                         <Bpm />
                     </Route>
@@ -46,7 +44,11 @@ export default function App() {
                     <Route path="/posture-static">
                         <StaticPosture />
                     </Route>
+                    <Route path="">
+                        <PosPractice />
+                    </Route>
                 </Switch>
+                <Footer />
             </div>
         </Router>
     );
