@@ -10,7 +10,9 @@ function Footer() {
             <section class="social-media">
                 <div class="social-media-wrap">
                     <div class="footer-logo">
-                        <img src="img/wings.svg" alt="" />
+                        <a href="https://allegrotraining.feriadesoftware.cl/">
+                            <img src="img/wings.svg" alt="" />
+                        </a>
                     </div>
                     <small class="website-rights">Wings © 2020</small>
                     <div>
