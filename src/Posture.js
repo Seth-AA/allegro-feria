@@ -7,11 +7,144 @@ import {
     drawSkeleton,
     Evaluation,
     correctPos,
+    distance,
 } from "./Posture_utils.js";
 
 import { Container, Row, Col } from "react-bootstrap";
 
-function correctPoints(posesJson) {
+function correctPointsViolin(posesJson) {
+    const points = posesJson.keypoints;
+    var correctPoints = {
+        score: posesJson.score,
+        keypoints: [],
+    };
+    points.forEach((element, index) => {
+        if (element.part == "leftShoulder") {
+            correctPoints.keypoints.push(element);
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightShoulder";
+            });
+            const x = point1[0].position.x;
+            const y = element.position.y;
+            correctPoints.keypoints.push({
+                position: { x, y },
+                part: "rightShoulder",
+                score: 1,
+            });
+            const pointW = posesJson.keypoints.filter((part) => {
+                return part.part == "leftWrist";
+            });
+            const pointE = posesJson.keypoints.filter((part) => {
+                return part.part == "leftElbow";
+            });
+
+            const a = distance(
+                pointW[0].position.x,
+                pointW[0].position.y,
+                pointE[0].position.x,
+                pointE[0].position.y
+            );
+            const b = distance(
+                pointW[0].position.x,
+                pointW[0].position.y,
+                element.position.x,
+                element.position.y
+            );
+            const c = distance(
+                element.position.x,
+                element.position.y,
+                pointE[0].position.x,
+                pointE[0].position.y
+            );
+            if (Math.pow(a, 2) + Math.pow(c, 2) < Math.pow(b, 2)) {
+                const x =
+                    pointW[0].position.x -
+                    (pointW[0].position.x - pointE[0].position.x) / 2;
+                const y = pointW[0].position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "leftWrist",
+                    score: 1,
+                });
+            } else if (pointW[0].position.x < element.position.x) {
+                const x = 2 * pointW[0].position.x - element.position.x;
+                const y = pointW.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "leftWrist",
+                    score: 1,
+                });
+            }
+        } else if (element.part == "rightElbow") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightShoulder";
+            });
+            if (element.position.y < point1[0].position.y) {
+                const x = element.position.x;
+                const y = 2 * point1[0].position.y - element.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "rightElbow",
+                    score: 1,
+                });
+            } else {
+                correctPoints.keypoints.push(element);
+            }
+        } else if (element.part == "leftElbow") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "leftShoulder";
+            });
+            if (element.position.y < point1[0].position.y) {
+                const x = element.position.x;
+                const y = 2 * point1[0].position.y - element.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "leftElbow",
+                    score: 1,
+                });
+            } else {
+                correctPoints.keypoints.push(element);
+            }
+        } else if (element.part == "rightWrist") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "nose";
+            });
+            const point2 = posesJson.keypoints.filter((part) => {
+                return part.part == "rightElbow";
+            });
+            if (element.position.y < point1[0].position.y) {
+                const x = element.position.x;
+                const y = 465 - element.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "rightWrist",
+                    score: 1,
+                });
+            } else if (element.position.x < point2[0].position.x) {
+                const x = 2 * point2[0].position.x - element.position.x;
+                const y = element.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "rightWrist",
+                    score: 1,
+                });
+            } else {
+                correctPoints.keypoints.push(element);
+            }
+        } else {
+            correctPoints.keypoints.push(element);
+        }
+    });
+    correctPoints.keypoints = correctPoints.keypoints.reduce((unique, o) => {
+        if (!unique.some((obj) => obj.part === o.part)) {
+            unique.push(o);
+        }
+        return unique;
+    }, []);
+    return correctPoints;
+}
+
+function correctPointsGuitar(posesJson) {
     const points = posesJson.keypoints;
     var correctPoints = {
         score: posesJson.score,
@@ -54,7 +187,15 @@ function correctPoints(posesJson) {
     return correctPoints;
 }
 
-function Posture() {
+function correctPoints(posesJson, instrumento) {
+    if (instrumento.instrumento == "VIOLIN") {
+        return correctPointsViolin(posesJson);
+    } else if (instrumento.instrumento == "GUITAR") {
+        return correctPointsGuitar(posesJson);
+    }
+}
+
+function Posture(instrumento) {
     const [H, setH] = useState(465);
     const [W, setW] = useState(620);
 
@@ -110,7 +251,7 @@ function Posture() {
         if (skeletonSuges == true) {
             drawSkeleton(
                 correctPosesJson.keypoints,
-                0.5,
+                0.75,
                 correctRef.current.getContext("2d"),
                 W,
                 H,
@@ -192,7 +333,7 @@ function Posture() {
                                 try {
                                     setPosesJson(poses[0]);
                                     setCorrectPosesJson(
-                                        correctPoints(poses[0])
+                                        correctPoints(poses[0], instrumento)
                                     );
                                 } catch (error) {
                                     setPosesJson({ score: 0, keypoints: [] });
@@ -227,7 +368,7 @@ function Posture() {
                 <Col md={3}>
                     <div className="pretty_container_right">
                         {" "}
-                        {detalles ? Coordinates(posesJson) : ""}
+                        {detalles ? Coordinates(correctPosesJson) : ""}
                     </div>
                 </Col>
             </Row>
