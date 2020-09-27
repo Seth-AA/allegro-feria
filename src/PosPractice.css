@@ -1,8 +1,7 @@
 .header {
     text-align: center;
     margin: auto;
-    padding-top: 1%;
-    padding-bottom: 2.5%;
+    padding-bottom: 1.5%;
 }
 
 .inselect {
@@ -35,4 +34,10 @@
 
 .inselect:hover {
     border: 15px solid #112351 !important;
+}
+
+@media only screen and (max-height: 768px) {
+    .inselect {
+        height: 500px;
+    }
 }

@@ -21,7 +21,8 @@
     justify-content: space-between;
     align-items: center;
     width: 90%;
-    margin: 40px auto 0 auto;
+    margin: 70px auto 0 auto;
+    position: sticky;
 }
 
 .social-media-wrap > small {
@@ -89,5 +90,8 @@
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-height: 768px) {
+    .social-media-wrap {
+        margin: 10px auto 0 auto !important;
+    }
 }

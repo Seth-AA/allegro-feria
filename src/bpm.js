@@ -41,7 +41,16 @@ class Bpm extends Component {
                     {this.state.audio ? (
                         <AudioAnalyser audio={this.state.audio} />
                     ) : (
-                        ""
+                        <div
+                            style={{
+                                height: "639px",
+                                width: "759px",
+                                backgroundColor: "#2e5a98",
+                                margin: "auto",
+                                border: "2px solid #1f447b",
+                                borderRadius: "15px",
+                            }}
+                        />
                     )}
                 </div>
                 <div

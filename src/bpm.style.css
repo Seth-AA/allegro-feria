@@ -62,7 +62,6 @@ h1 {
 
 .boxed {
     border: 2px solid #1f447b;
-    cursor: pointer;
     border-radius: 15px;
     background-color: #2e5a98;
 }
