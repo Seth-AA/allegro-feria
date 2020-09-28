@@ -41,6 +41,11 @@
 .pretty_container_left > div {
     padding-bottom: 25px;
 }
+
+.pretty_container_left > ul {
+    margin-left: -15px;
+}
+
 .asd {
     margin-bottom: 25px !important;
 }
@@ -51,12 +56,7 @@
     height: 640px;
     border-radius: 10px;
 }
-.pretty_container_right {
-    background: #1f447b;
-    margin: 20px 40px 20px 40px;
-    height: 640px;
-    border-radius: 10px;
-}
+
 .container {
     display: block;
     position: relative;

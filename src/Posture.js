@@ -366,10 +366,53 @@ function Posture(instrumento) {
                     </div>
                 </Col>
                 <Col md={3}>
-                    <div className="pretty_container_right">
-                        {" "}
-                        {detalles ? Coordinates(correctPosesJson) : ""}
-                    </div>
+                    {instrumento.instrumento == "VIOLIN" ? (
+                        <div className="pretty_container_left">
+                            <h4>Tips para Violin</h4>
+                            <ul>
+                                <li>Relaja tus hombros y mantenlos derechos</li>
+                                <li>
+                                    Sostiene el violin de tal manera que este
+                                    paralelo al suelo
+                                </li>
+                                <li>
+                                    No sostengas el mango del violin con la
+                                    palma de tu mano. Usa la base de tu pulgar.
+                                </li>
+                                <li>
+                                    El arco debe ir en perpendicular con el
+                                    mastil del Violin para un sonido adecuado
+                                </li>
+                                <li>Manten tus muñecas relajadas y derechas</li>
+                                <li>
+                                    Si estas parado balanceate usando ambos pies
+                                    en vez de solo tu pierna dominante
+                                </li>
+                            </ul>
+                        </div>
+                    ) : (
+                        <div className="pretty_container_left">
+                            <h4>Tips para Guitarra</h4>
+                            <ul>
+                                <li>Sientate derecho</li>
+
+                                <li>
+                                    Reposa tu pie izquierdo sobre alguna
+                                    superficie cercana
+                                </li>
+
+                                <li>
+                                    Situa la guitarra entre medio de tus piernas
+                                </li>
+                                <li>
+                                    El clavijero deberia estar a la altura de tu
+                                    cabeza (aproximadamente)
+                                </li>
+                                <li>Manten tus muñecas relajadas y derechas</li>
+                            </ul>
+                        </div>
+                    )}
+                    {detalles ? Coordinates(correctPosesJson) : ""}
                 </Col>
             </Row>
         </Container>
