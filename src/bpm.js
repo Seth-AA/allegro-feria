@@ -42,15 +42,44 @@ class Bpm extends Component {
                         <AudioAnalyser audio={this.state.audio} />
                     ) : (
                         <div
-                            style={{
-                                height: "639px",
-                                width: "759px",
-                                backgroundColor: "#2e5a98",
-                                margin: "auto",
-                                border: "2px solid #1f447b",
-                                borderRadius: "15px",
-                            }}
-                        />
+                            className="col-6 boxed"
+                            style={{ margin: "0 auto", height: "622px" }}
+                        >
+                            <div
+                                className="current-bpm"
+                                style={{
+                                    color: "#dfe6e9",
+                                    marginTop: "4%",
+                                }}
+                            >
+                                0
+                                <p
+                                    style={{
+                                        fontSize: "25px",
+                                        paddingBottom: "5px",
+                                    }}
+                                >
+                                    BPM
+                                </p>
+                            </div>
+                            <div className="medidor">
+                                <div
+                                    className="outline"
+                                    style={{
+                                        position: "relative",
+                                        display: "inline-block",
+                                        textAlign: "center",
+                                        height: "auto",
+                                    }}
+                                ></div>
+                            </div>
+                            <div className="flex-row boxed panel-history">
+                                {" "}
+                            </div>
+                            <svg height="100" width="440">
+                                <line x1="0" y1="50" x2="440" y2="50" />
+                            </svg>
+                        </div>
                     )}
                 </div>
                 <div

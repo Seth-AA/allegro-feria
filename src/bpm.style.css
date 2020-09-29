@@ -14,10 +14,6 @@
     /* border-radius: 4px; */
 }
 
-h1 {
-    color: red;
-}
-
 .current-bpm {
     background-color: #1f447b !important;
     width: 200px !important;
@@ -67,6 +63,14 @@ h1 {
 }
 .boxed canvas {
     display: block;
+}
+
+.boxed > svg {
+    display: block !important;
+    margin: auto !important;
+    padding: 20px !important;
+    stroke: rgb(0, 0, 0);
+    stroke-width: 3;
 }
 
 .panel-history {
