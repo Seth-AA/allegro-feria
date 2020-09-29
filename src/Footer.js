@@ -34,8 +34,7 @@ function Footer() {
                             className="social-link small"
                             href="mailto:allegro.wings@gmail.com"
                         >
-                            <i class="fa fa-envelope-o"></i>
-                            {""}
+                            <img src="/img/email.svg" width="15px" />{" "}
                             allegro.wings@gmail.com
                         </a>
                     </div>

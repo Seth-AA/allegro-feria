@@ -12,7 +12,7 @@ import {
     distance,
 } from "./Posture_utils.js";
 
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 function correctPointsViolin(posesJson) {
     const points = posesJson.keypoints;
@@ -216,6 +216,8 @@ function Posture(instrumento) {
     const canvasRef = useRef(null);
     const correctRef = useRef(1);
 
+    const [showCuadrado, setShowCuadrado] = useState(true);
+
     const handleSkeleton = () => {
         var checkBox = document.getElementById("skeletonCheck");
         if (checkBox.checked == true) {
@@ -289,6 +291,24 @@ function Posture(instrumento) {
                 <Col md={3}>
                     <div className="pretty_container_left">
                         <h4>Opciones</h4>
+
+                        <div className="custom-control custom-checkbox">
+                            <input
+                                className="custom-control-input"
+                                type="checkbox"
+                                id="cuadradoCheck"
+                                defaultChecked={true}
+                                onClick={(e) => {
+                                    setShowCuadrado(!showCuadrado);
+                                }}
+                            />
+                            <label
+                                className="custom-control-label"
+                                for="cuadradoCheck"
+                            >
+                                Enmarcar pose
+                            </label>
+                        </div>
                         <div className="custom-control custom-checkbox">
                             <input
                                 className="custom-control-input"
@@ -321,6 +341,13 @@ function Posture(instrumento) {
                                 Mostrar sugerencia
                             </label>
                         </div>
+                        <Button
+                            variant="outline-light"
+                            href="/posture-analyzer"
+                            className="pog"
+                        >
+                            Cambiar instrumento
+                        </Button>
                     </div>
                 </Col>
                 <Col md={6}>
@@ -362,23 +389,28 @@ function Posture(instrumento) {
                                     }
                                 }}
                             />
-                            <svg width={W} height={H}>
-                                <rect
-                                    x={edgePoint(posesJson, "x", "min")}
-                                    y={edgePoint(posesJson, "y", "min")}
-                                    width={
-                                        edgePoint(posesJson, "x", "max") -
-                                        edgePoint(posesJson, "x", "min")
-                                    }
-                                    height={
-                                        edgePoint(posesJson, "y", "max") -
-                                        edgePoint(posesJson, "y", "min")
-                                    }
-                                    fill="None"
-                                    stroke={Evaluation(errorJson)}
-                                    stroke-width={5}
-                                />
-                            </svg>
+                            {showCuadrado ? (
+                                <svg width={W} height={H}>
+                                    <rect
+                                        x={edgePoint(posesJson, "x", "min")}
+                                        y={edgePoint(posesJson, "y", "min")}
+                                        width={
+                                            edgePoint(posesJson, "x", "max") -
+                                            edgePoint(posesJson, "x", "min")
+                                        }
+                                        height={
+                                            edgePoint(posesJson, "y", "max") -
+                                            edgePoint(posesJson, "y", "min")
+                                        }
+                                        fill="None"
+                                        stroke={Evaluation(errorJson)}
+                                        stroke-width={5}
+                                    />
+                                </svg>
+                            ) : (
+                                <svg></svg>
+                            )}
+
                             <canvas ref={canvasRef} width={W} height={H} />
                             <canvas ref={correctRef} width={W} height={H} />
                         </div>
