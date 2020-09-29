@@ -3,9 +3,11 @@ import PoseNet from "react-posenet";
 import "./Posture.css";
 import {
     edgePoint,
-    Coordinates,
+    Error,
     drawSkeleton,
     Evaluation,
+    EvalHead,
+    EvalMsg,
     correctPos,
     distance,
 } from "./Posture_utils.js";
@@ -206,10 +208,10 @@ function Posture(instrumento) {
         keypoints: [],
     });
 
+    const [errorJson, setErrorJson] = useState({ error: -1, keypoints: [] });
+
     const [skeletonWatch, setSkeletonWatch] = useState(false);
     const [skeletonSuges, setSkeletonSuges] = useState(false);
-
-    const [detalles, setDetalles] = useState(false);
 
     const canvasRef = useRef(null);
     const correctRef = useRef(1);
@@ -259,6 +261,27 @@ function Posture(instrumento) {
             );
         }
     });
+    /*
+    const [detalles, setDetalles] = useState(false);
+    <div className="custom-control custom-checkbox">
+    <input
+        className="custom-control-input"
+        type="checkbox"
+        id="detallesCheck"
+        onClick={(e) => {
+            setDetalles(!detalles);
+        }}
+    />
+    <label
+        className="custom-control-label"
+        for="detallesCheck"
+    >
+        Mostrar detalles
+    </label>
+    </div>
+    
+                    {detalles ? Coordinates(correctPosesJson) : ""}
+    */
 
     return (
         <Container fluid>
@@ -298,71 +321,69 @@ function Posture(instrumento) {
                                 Mostrar sugerencia
                             </label>
                         </div>
-                        <div className="custom-control custom-checkbox">
-                            <input
-                                className="custom-control-input"
-                                type="checkbox"
-                                id="detallesCheck"
-                                onClick={(e) => {
-                                    setDetalles(!detalles);
-                                }}
-                            />
-                            <label
-                                className="custom-control-label"
-                                for="detallesCheck"
-                            >
-                                Mostrar detalles
-                            </label>
-                        </div>
                     </div>
                 </Col>
                 <Col md={6}>
-                    <div className="pretty_container_center img-overlay-wrap pose">
-                        <PoseNet
-                            height={H}
-                            width={W}
-                            frameRate={15}
-                            inferenceConfig={{
-                                decodingMethod: "single-person",
-                                architecture: "MobileNetV1",
-                                outputStride: 16,
-                                multiplier: 0.5,
-                                quantBytes: 1,
-                            }}
-                            onEstimate={(poses) => {
-                                try {
-                                    setPosesJson(poses[0]);
-                                    setCorrectPosesJson(
-                                        correctPoints(poses[0], instrumento)
-                                    );
-                                } catch (error) {
-                                    setPosesJson({ score: 0, keypoints: [] });
-                                    setCorrectPosesJson({
-                                        score: 0,
-                                        keypoints: [],
-                                    });
-                                }
-                            }}
-                        />
-                        <svg width={W} height={H}>
-                            <rect
-                                x={edgePoint(posesJson, "x", "min")}
-                                y={edgePoint(posesJson, "y", "min")}
-                                width={
-                                    edgePoint(posesJson, "x", "max") -
-                                    edgePoint(posesJson, "x", "min")
-                                }
-                                height={
-                                    edgePoint(posesJson, "y", "max") -
-                                    edgePoint(posesJson, "y", "min")
-                                }
-                                fill="None"
-                                stroke={Evaluation(posesJson, correctPosesJson)}
-                                stroke-width={5}
+                    <div className="pretty_container_center">
+                        <div className="pose img-overlay-wrap">
+                            <PoseNet
+                                height={H}
+                                width={W}
+                                frameRate={15}
+                                inferenceConfig={{
+                                    decodingMethod: "single-person",
+                                    architecture: "MobileNetV1",
+                                    outputStride: 16,
+                                    multiplier: 0.5,
+                                    quantBytes: 1,
+                                }}
+                                onEstimate={(poses) => {
+                                    try {
+                                        setPosesJson(poses[0]);
+                                        const newCP = correctPoints(
+                                            poses[0],
+                                            instrumento
+                                        );
+                                        setCorrectPosesJson(newCP);
+                                        setErrorJson(Error(poses[0], newCP));
+                                    } catch (error) {
+                                        setPosesJson({
+                                            score: 0,
+                                            keypoints: [],
+                                        });
+                                        setCorrectPosesJson({
+                                            score: 0,
+                                            keypoints: [],
+                                        });
+                                        setErrorJson({
+                                            error: -1,
+                                            keypoints: [],
+                                        });
+                                    }
+                                }}
                             />
-                        </svg>
-                        <canvas ref={canvasRef} width={W} height={H} />
-                        <canvas ref={correctRef} width={W} height={H} />
+                            <svg width={W} height={H}>
+                                <rect
+                                    x={edgePoint(posesJson, "x", "min")}
+                                    y={edgePoint(posesJson, "y", "min")}
+                                    width={
+                                        edgePoint(posesJson, "x", "max") -
+                                        edgePoint(posesJson, "x", "min")
+                                    }
+                                    height={
+                                        edgePoint(posesJson, "y", "max") -
+                                        edgePoint(posesJson, "y", "min")
+                                    }
+                                    fill="None"
+                                    stroke={Evaluation(errorJson)}
+                                    stroke-width={5}
+                                />
+                            </svg>
+                            <canvas ref={canvasRef} width={W} height={H} />
+                            <canvas ref={correctRef} width={W} height={H} />
+                        </div>
+                        <h1>{EvalHead(errorJson)}</h1>
+                        <p>{EvalMsg(errorJson)}</p>
                     </div>
                 </Col>
                 <Col md={3}>
@@ -412,7 +433,6 @@ function Posture(instrumento) {
                             </ul>
                         </div>
                     )}
-                    {detalles ? Coordinates(correctPosesJson) : ""}
                 </Col>
             </Row>
         </Container>

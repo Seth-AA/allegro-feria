@@ -149,9 +149,33 @@ export function distance(x1, y1, x2, y2) {
     return Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), 0.5);
 }
 
-export function Evaluation(posesJson, correctPosesJson) {
+export function Error(posesJson, correctPosesJson) {
+    var errorJson = { error: 0, keypoints: [] };
     try {
-        var error = 0.0;
+        var err;
+        posesJson.keypoints.forEach((part, index) => {
+            err = distance(
+                part.position.x,
+                part.position.y,
+                correctPosesJson.keypoints[index].position.x,
+                correctPosesJson.keypoints[index].position.y
+            );
+            errorJson.error = errorJson.error + err;
+            errorJson.keypoints.push({ part: part.part, error: err });
+        });
+
+        return errorJson;
+    } catch (error) {
+        errorJson.error = -1;
+        return errorJson;
+    }
+}
+
+export function Evaluation(errorJson) {
+    try {
+        if (errorJson.error == -1) {
+            return "black";
+        }
         var errorEval = "black";
         var no_yel_flag = true;
         var no_red_flag = true;
@@ -159,8 +183,9 @@ export function Evaluation(posesJson, correctPosesJson) {
         var rw = false;
         var le = false;
         var re = false;
-        posesJson.keypoints.forEach((part, index) => {
-            error = 0.0;
+        var error;
+        errorJson.keypoints.forEach((part, index) => {
+            error = part.error;
             if (part.part == "leftWrist") {
                 lw = true;
                 error = -10;
@@ -174,14 +199,6 @@ export function Evaluation(posesJson, correctPosesJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            error =
-                error +
-                distance(
-                    part.position.x,
-                    part.position.y,
-                    correctPosesJson.keypoints[index].position.x,
-                    correctPosesJson.keypoints[index].position.y
-                );
             if (error > 100) {
                 errorEval = "red";
                 no_red_flag = false;
@@ -199,6 +216,133 @@ export function Evaluation(posesJson, correctPosesJson) {
         } else return "black";
     } catch (error) {
         return "black";
+    }
+}
+
+export function EvalHead(errorJson) {
+    try {
+        if (errorJson.error == -1) {
+            return "Identificando pose...";
+        }
+        var errorEval = "Identificando pose...";
+        var no_yel_flag = true;
+        var no_red_flag = true;
+        var lw = false;
+        var rw = false;
+        var le = false;
+        var re = false;
+        var error;
+        errorJson.keypoints.forEach((part, index) => {
+            error = part.error;
+            if (part.part == "leftWrist") {
+                lw = true;
+                error = -10;
+            }
+            if (part.part == "rightWrist") {
+                rw = true;
+            }
+            if (part.part == "leftElbow") {
+                le = true;
+            }
+            if (part.part == "rightElbow") {
+                re = true;
+            }
+            if (error > 100) {
+                errorEval = "Postura inadecuada";
+                no_red_flag = false;
+            }
+            if (error > 50 && no_red_flag) {
+                errorEval = "Postura mejorable";
+                no_yel_flag = false;
+            }
+            if (error < 50 && no_red_flag && no_yel_flag) {
+                errorEval = "¡Buena Postura!";
+            }
+        });
+        if (lw && rw && le && re) {
+            return errorEval;
+        } else return "Identificando pose...";
+    } catch (error) {
+        return "Identificando pose...";
+    }
+}
+
+function traducir(part) {
+    var dict = new Map();
+    dict.set("nose", "nariz");
+    dict.set("leftEye", "ojo izquierdo");
+    dict.set("rightEye", "ojo derecho");
+    dict.set("leftEar", "oreja izquierda");
+    dict.set("rightEar", "oreja derecha");
+    dict.set("leftHip", "cadera izquierda");
+    dict.set("rightHip", "cadera derecha");
+
+    dict.set("leftShoulder", "hombro izquierdo");
+    dict.set("rightShoulder", "hombro derecho");
+    dict.set("leftElbow", "codo izquierdo");
+    dict.set("rightElbow", "codo derecho");
+    dict.set("leftWrist", "muñeca izquierda");
+    dict.set("rightWrist", "muñeca derecha");
+    dict.set("leftKnee", "rodilla izquierda");
+    dict.set("rightKnee", "rodilla derecha");
+    dict.set("leftAnkle", "tobillo izquierdo");
+    dict.set("rightAnkle", "tobillo derecho");
+    return dict.get(part);
+}
+
+export function EvalMsg(errorJson) {
+    try {
+        if (errorJson.error == -1) {
+            return "";
+        }
+        var worstPart = "";
+        var worstError = -1;
+        var error;
+        var no_yel_flag = true;
+        var no_red_flag = true;
+        var lw = false;
+        var rw = false;
+        var le = false;
+        var re = false;
+        var errorEval = "";
+        errorJson.keypoints.forEach((part, index) => {
+            error = part.error;
+            if (error > worstError) {
+                worstPart = part.part;
+                worstError = error;
+            }
+            if (part.part == "leftWrist") {
+                lw = true;
+                error = -10;
+            }
+            if (part.part == "rightWrist") {
+                rw = true;
+            }
+            if (part.part == "leftElbow") {
+                le = true;
+            }
+            if (part.part == "rightElbow") {
+                re = true;
+            }
+            if (error > 100) {
+                errorEval = "Postura inadecuada";
+                no_red_flag = false;
+            }
+            if (error > 50 && no_red_flag) {
+                errorEval = "Postura mejorable";
+                no_yel_flag = false;
+            }
+            if (error < 50 && no_red_flag && no_yel_flag) {
+                errorEval = "¡Buena Postura!";
+            }
+        });
+        if (lw && rw && le && re) {
+            if (errorEval == "¡Buena Postura!") {
+                return "";
+            } else return "Acomoda mejor tu " + traducir(worstPart);
+        } else return "";
+    } catch (error) {
+        return "";
     }
 }
 

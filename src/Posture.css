@@ -6,8 +6,8 @@
 
 .img-overlay-wrap svg {
     position: absolute;
-    top: 8.5%;
-    left: 3.5% !important;
+    margin-top: 20px;
+    margin-left: 20px;
 }
 
 .img-overlay-wrap canvas {
@@ -16,13 +16,40 @@
     left: 3.5%;
 }
 
-.options {
-    float: left;
+.pretty_container_center {
+    background: #1f447b;
+    margin: 20px 0px 20px 0px;
+    height: 640px;
+    border-radius: 10px;
+}
+
+.pretty_container_center > h1 {
+    display: block;
+    padding-top: 480px;
+    text-align: center;
+    align-items: center;
+    color: #fff;
+    font-weight: normal;
+    font-size: 40px;
+}
+.pretty_container_center > p {
+    display: block;
+    padding-top: 10px;
+    text-align: center;
+    align-items: center;
+    color: #fff;
+    font-weight: normal;
+    font-size: 25px;
 }
 
 .pose {
-    background: #1f447b;
-    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    margin: auto;
+}
+
+.options {
+    float: left;
 }
 
 .pretty_container_left {
@@ -48,13 +75,6 @@
 
 .asd {
     margin-bottom: 25px !important;
-}
-
-.pretty_container_center {
-    background: #1f447b;
-    margin: 20px 0px 20px 0px;
-    height: 640px;
-    border-radius: 10px;
 }
 
 .container {
