@@ -10,7 +10,6 @@ import {
     EvalMsg,
     correctPos,
     distance,
-    Coordinates,
 } from "./Posture_utils.js";
 
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -22,77 +21,87 @@ function correctPointsViolin(posesJson) {
         keypoints: [],
     };
     points.forEach((element, index) => {
-        var x, y;
-        if (element.part == "rightShoulder") {
+        if (element.part == "leftShoulder") {
+            correctPoints.keypoints.push(element);
             const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "leftShoulder";
+                return part.part == "rightShoulder";
             });
-            x = element.position.x;
-            y = point1[0].position.y;
+            const x = point1[0].position.x;
+            const y = element.position.y;
             correctPoints.keypoints.push({
                 position: { x, y },
                 part: "rightShoulder",
                 score: 1,
             });
-        } else if (element.part == "leftElbow") {
             const pointW = posesJson.keypoints.filter((part) => {
                 return part.part == "leftWrist";
             });
-            const pointS = posesJson.keypoints.filter((part) => {
-                return part.part == "leftShoulder";
+            const pointE = posesJson.keypoints.filter((part) => {
+                return part.part == "leftElbow";
             });
-            if (pointW[0].part.y < pointS[0].position.y) {
-                x = element.position.x;
-                y = 99;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "leftElbow",
-                    score: 1,
-                });
-            } else {
-                correctPoints.keypoints.push(element);
-            }
-        } else if (element.part == "leftWrist") {
-            const pointS = posesJson.keypoints.filter((part) => {
-                return part.part == "leftShoulder";
-            });
-            if (element.position.y - pointS[0].position.x > 30) {
-                x = element.position.x;
-                y = pointS[0].position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "leftWrist",
-                    score: 1,
-                });
-            } else if (element.position.x < pointS[0].position.x) {
-                x = 2 * pointS[0].position.x - element.position.x;
-                y = element.position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "leftWrist",
-                    score: 1,
-                });
-            } else if (element.position.y < pointS[0].position.y) {
-                x = element.position.x;
-                y = pointS[0].position.y;
+
+            const a = distance(
+                pointW[0].position.x,
+                pointW[0].position.y,
+                pointE[0].position.x,
+                pointE[0].position.y
+            );
+            const b = distance(
+                pointW[0].position.x,
+                pointW[0].position.y,
+                element.position.x,
+                element.position.y
+            );
+            const c = distance(
+                element.position.x,
+                element.position.y,
+                pointE[0].position.x,
+                pointE[0].position.y
+            );
+            if (Math.pow(a, 2) + Math.pow(c, 2) < Math.pow(b, 2)) {
+                const x =
+                    pointW[0].position.x -
+                    (pointW[0].position.x - pointE[0].position.x) / 2;
+                const y = pointW[0].position.y;
                 correctPoints.keypoints.push({
                     position: { x, y },
                     part: "leftWrist",
                     score: 1,
                 });
-            } else {
-                correctPoints.keypoints.push(element);
+            } else if (pointW[0].position.x < element.position.x) {
+                const x = 2 * pointW[0].position.x - element.position.x;
+                const y = pointW.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "leftWrist",
+                    score: 1,
+                });
             }
         } else if (element.part == "rightElbow") {
             const point1 = posesJson.keypoints.filter((part) => {
                 return part.part == "rightShoulder";
             });
             if (element.position.y < point1[0].position.y) {
-                x = element.position.x;
-                y = 2 * point1[0].position.y - element.position.y;
+                const x = element.position.x;
+                const y = 2 * point1[0].position.y - element.position.y;
                 correctPoints.keypoints.push({
                     position: { x, y },
                     part: "rightElbow",
+                    score: 1,
+                });
+            } else {
+                correctPoints.keypoints.push(element);
+            }
+        } else if (element.part == "leftElbow") {
+            const point1 = posesJson.keypoints.filter((part) => {
+                return part.part == "leftShoulder";
+            });
+            if (element.position.y < point1[0].position.y) {
+                const x = element.position.x;
+                const y = 2 * point1[0].position.y - element.position.y;
+                correctPoints.keypoints.push({
+                    position: { x, y },
+                    part: "leftElbow",
                     score: 1,
                 });
             } else {
@@ -106,16 +115,16 @@ function correctPointsViolin(posesJson) {
                 return part.part == "rightElbow";
             });
             if (element.position.y < point1[0].position.y) {
-                x = element.position.x;
-                y = 519 - element.position.y;
+                const x = element.position.x;
+                const y = 465 - element.position.y;
                 correctPoints.keypoints.push({
                     position: { x, y },
                     part: "rightWrist",
                     score: 1,
                 });
             } else if (element.position.x < point2[0].position.x) {
-                x = 2 * point2[0].position.x - element.position.x;
-                y = element.position.y;
+                const x = 2 * point2[0].position.x - element.position.x;
+                const y = element.position.y;
                 correctPoints.keypoints.push({
                     position: { x, y },
                     part: "rightWrist",
@@ -137,7 +146,7 @@ function correctPointsViolin(posesJson) {
     return correctPoints;
 }
 
-function correctPointsGuitar(posesJson, lefty) {
+function correctPointsGuitar(posesJson) {
     const points = posesJson.keypoints;
     var correctPoints = {
         score: posesJson.score,
@@ -189,10 +198,8 @@ function correctPoints(posesJson, instrumento) {
 }
 
 function Posture(instrumento) {
-    const [H, setH] = useState(519);
-    const [W, setW] = useState(692);
-
-    const [lefty, setLefty] = useState(false);
+    const [H, setH] = useState(465);
+    const [W, setW] = useState(620);
 
     const [posesJson, setPosesJson] = useState({ score: 0, keypoints: [] });
 
@@ -204,7 +211,7 @@ function Posture(instrumento) {
     const [errorJson, setErrorJson] = useState({ error: -1, keypoints: [] });
 
     const [skeletonWatch, setSkeletonWatch] = useState(false);
-    const [skeletonSuges, setSkeletonSuges] = useState(true);
+    const [skeletonSuges, setSkeletonSuges] = useState(false);
 
     const canvasRef = useRef(null);
     const correctRef = useRef(1);
@@ -236,7 +243,7 @@ function Posture(instrumento) {
             try {
                 drawSkeleton(
                     posesJson.keypoints,
-                    0.75,
+                    0.5,
                     canvasRef.current.getContext("2d"),
                     W,
                     H
@@ -248,7 +255,7 @@ function Posture(instrumento) {
         if (skeletonSuges == true) {
             drawSkeleton(
                 correctPosesJson.keypoints,
-                1.25,
+                0.75,
                 correctRef.current.getContext("2d"),
                 W,
                 H,
@@ -256,9 +263,8 @@ function Posture(instrumento) {
             );
         }
     });
-
-    /*const [detalles, setDetalles] = useState(false);
-
+    /*
+    const [detalles, setDetalles] = useState(false);
     <div className="custom-control custom-checkbox">
     <input
         className="custom-control-input"
@@ -274,16 +280,18 @@ function Posture(instrumento) {
     >
         Mostrar detalles
     </label>
-</div>
+    </div>
+    
+                    {detalles ? Coordinates(correctPosesJson) : ""}
+    */
 
-{detalles ? Coordinates(correctPosesJson) : ""}
-*/
     return (
         <Container fluid>
             <Row>
                 <Col md={3}>
                     <div className="pretty_container_left">
                         <h4>Opciones</h4>
+
                         <div className="custom-control custom-checkbox">
                             <input
                                 className="custom-control-input"
@@ -322,7 +330,6 @@ function Posture(instrumento) {
                                 className="custom-control-input"
                                 type="checkbox"
                                 id="sugesCheck"
-                                defaultChecked={true}
                                 onClick={(e) => {
                                     handleSuges(W, H);
                                 }}
@@ -334,31 +341,6 @@ function Posture(instrumento) {
                                 Mostrar sugerencia
                             </label>
                         </div>
-                        <p> Tipo de postura:</p>
-                        <div className="radiob">
-                            <input
-                                type="radio"
-                                id="Diestra"
-                                name="gender"
-                                value="Diestra"
-                                onClick={(e) => {
-                                    setLefty(false);
-                                }}
-                            />
-                            <label for="Diestra">Diestra</label>
-                            <br />
-                            <input
-                                type="radio"
-                                id="Zurda"
-                                name="gender"
-                                value="Zurda"
-                                onClick={(e) => {
-                                    setLefty(true);
-                                }}
-                            />
-                            <label for="Zurda">Zurda</label>
-                        </div>
-
                         <Button
                             variant="outline-light"
                             href="/posture-analyzer"
@@ -374,12 +356,13 @@ function Posture(instrumento) {
                             <PoseNet
                                 height={H}
                                 width={W}
-                                frameRate={30}
+                                frameRate={15}
                                 inferenceConfig={{
                                     decodingMethod: "single-person",
-                                    architecture: "ResNet50",
-                                    outputStride: 32,
-                                    quantBytes: 4,
+                                    architecture: "MobileNetV1",
+                                    outputStride: 16,
+                                    multiplier: 0.5,
+                                    quantBytes: 1,
                                 }}
                                 onEstimate={(poses) => {
                                     try {

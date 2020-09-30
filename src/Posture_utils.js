@@ -188,7 +188,6 @@ export function Evaluation(errorJson) {
             error = part.error;
             if (part.part == "leftWrist") {
                 lw = true;
-                error = -10;
             }
             if (part.part == "rightWrist") {
                 rw = true;
@@ -199,15 +198,15 @@ export function Evaluation(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 100) {
+            if (error > 80) {
                 errorEval = "red";
                 no_red_flag = false;
             }
-            if (error > 50 && no_red_flag) {
+            if (error > 40 && no_red_flag) {
                 errorEval = "yellow";
                 no_yel_flag = false;
             }
-            if (error < 50 && no_red_flag && no_yel_flag) {
+            if (error < 40 && no_red_flag && no_yel_flag) {
                 errorEval = "green";
             }
         });
@@ -236,7 +235,6 @@ export function EvalHead(errorJson) {
             error = part.error;
             if (part.part == "leftWrist") {
                 lw = true;
-                error = -10;
             }
             if (part.part == "rightWrist") {
                 rw = true;
@@ -247,15 +245,15 @@ export function EvalHead(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 100) {
+            if (error > 80) {
                 errorEval = "Postura inadecuada";
                 no_red_flag = false;
             }
-            if (error > 50 && no_red_flag) {
+            if (error > 40 && no_red_flag) {
                 errorEval = "Postura mejorable";
                 no_yel_flag = false;
             }
-            if (error < 50 && no_red_flag && no_yel_flag) {
+            if (error < 40 && no_red_flag && no_yel_flag) {
                 errorEval = "¡Buena Postura!";
             }
         });
@@ -313,7 +311,6 @@ export function EvalMsg(errorJson) {
             }
             if (part.part == "leftWrist") {
                 lw = true;
-                error = -10;
             }
             if (part.part == "rightWrist") {
                 rw = true;
@@ -324,15 +321,15 @@ export function EvalMsg(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 100) {
+            if (error > 80) {
                 errorEval = "Postura inadecuada";
                 no_red_flag = false;
             }
-            if (error > 50 && no_red_flag) {
+            if (error > 40 && no_red_flag) {
                 errorEval = "Postura mejorable";
                 no_yel_flag = false;
             }
-            if (error < 50 && no_red_flag && no_yel_flag) {
+            if (error < 40 && no_red_flag && no_yel_flag) {
                 errorEval = "¡Buena Postura!";
             }
         });
@@ -346,7 +343,15 @@ export function EvalMsg(errorJson) {
     }
 }
 
-export function correctPos(partLeft, partRight, x1, y1, x2, y2) {
+export function correctPos(partLeft, partRight, x1, y1, x2, y2, lefty = false) {
+    if (lefty) {
+        x1 = -x1;
+        x2 = -x2;
+        const temp = partLeft;
+        partLeft = partRight;
+        partRight = temp;
+    }
+
     const m1 = (y2 - y1) / (x2 - x1);
     //var n1 = y1 - m1 * x1;
 

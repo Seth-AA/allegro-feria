@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Posture from "./Posture";
-import { Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import "./PosPractice.css";
 class PosPractice extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class PosPractice extends Component {
                 {this.state.instrumento ? (
                     <Posture instrumento={this.state.instrumento} />
                 ) : (
-                    <div>
+                    <Container fluid>
                         <Row>
                             <div className="header">
                                 <h2>¡Escoge tu instrumento!</h2>
@@ -58,7 +58,7 @@ class PosPractice extends Component {
                                 </div>
                             </Col>
                         </Row>
-                    </div>
+                    </Container>
                 )}
             </div>
         );
