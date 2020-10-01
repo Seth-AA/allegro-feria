@@ -337,6 +337,12 @@ function correctPoints(posesJson, instrumento, lefty) {
 function Posture(instrumento) {
     const [H, setH] = useState(519);
     const [W, setW] = useState(692);
+    let theta;
+    if (instrumento.instrumento == "GUITAR") {
+        theta = 25;
+    } else {
+        theta = 0;
+    }
 
     const [lefty, setLefty] = useState(false);
 
@@ -568,7 +574,7 @@ function Posture(instrumento) {
                                             edgePoint(posesJson, "y", "min")
                                         }
                                         fill="None"
-                                        stroke={Evaluation(errorJson)}
+                                        stroke={Evaluation(errorJson, theta)}
                                         stroke-width={5}
                                     />
                                 </svg>
@@ -579,8 +585,8 @@ function Posture(instrumento) {
                             <canvas ref={canvasRef} width={W} height={H} />
                             <canvas ref={correctRef} width={W} height={H} />
                         </div>
-                        <h1>{EvalHead(errorJson)}</h1>
-                        <p>{EvalMsg(errorJson)}</p>
+                        <h1>{EvalHead(errorJson, theta)}</h1>
+                        <p>{EvalMsg(errorJson, theta)}</p>
                     </div>
                 </Col>
                 <Col md={3}>

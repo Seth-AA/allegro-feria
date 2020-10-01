@@ -219,7 +219,7 @@ export function Evaluation(errorJson, theta = 0) {
     }
 }
 
-export function EvalHead(errorJson) {
+export function EvalHead(errorJson, theta = 0) {
     try {
         if (errorJson.error == -1) {
             return "Identificando pose...";
@@ -246,15 +246,15 @@ export function EvalHead(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 80) {
+            if (error > 80 + theta) {
                 errorEval = "Postura inadecuada";
                 no_red_flag = false;
             }
-            if (error > 40 && no_red_flag) {
+            if (error > 40 + theta && no_red_flag) {
                 errorEval = "Postura mejorable";
                 no_yel_flag = false;
             }
-            if (error < 40 && no_red_flag && no_yel_flag) {
+            if (error < 40 + theta && no_red_flag && no_yel_flag) {
                 errorEval = "¡Buena Postura!";
             }
         });
@@ -289,7 +289,7 @@ function traducir(part) {
     return dict.get(part);
 }
 
-export function EvalMsg(errorJson) {
+export function EvalMsg(errorJson, theta = 0) {
     try {
         if (errorJson.error == -1) {
             return "";
@@ -322,15 +322,15 @@ export function EvalMsg(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 80) {
+            if (error > 80 + theta) {
                 errorEval = "Postura inadecuada";
                 no_red_flag = false;
             }
-            if (error > 40 && no_red_flag) {
+            if (error > 40 + theta && no_red_flag) {
                 errorEval = "Postura mejorable";
                 no_yel_flag = false;
             }
-            if (error < 40 && no_red_flag && no_yel_flag) {
+            if (error < 40 + theta && no_red_flag && no_yel_flag) {
                 errorEval = "¡Buena Postura!";
             }
         });
