@@ -193,7 +193,7 @@ class AudioAnalyser extends Component {
                 {this.state.historial ? (
                     <div className="flex-row boxed panel-history">
                         {this.state.bpm
-                            .slice(-12)
+                            .slice(-14)
                             .reverse()
                             .map((number, index) => (
                                 <div className="bpm-info history">{number}</div>
