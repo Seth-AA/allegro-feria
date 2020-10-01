@@ -274,7 +274,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "leftKnee";
                 });
-                correctPoints.keypoints.push(//514
+                correctPoints.keypoints.push(
+                    //514
                     correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "rightAnkle") {
@@ -308,7 +309,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "rightKnee";
                 });
-                correctPoints.keypoints.push(//514
+                correctPoints.keypoints.push(
+                    //514
                     correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "leftAnkle") {
@@ -458,6 +460,7 @@ function Posture(instrumento) {
                                 className="custom-control-input"
                                 type="checkbox"
                                 id="skeletonCheck"
+                                defaultChecked={true}
                                 onClick={(e) => {
                                     handleSkeleton(W, H);
                                 }}
@@ -474,7 +477,6 @@ function Posture(instrumento) {
                                 className="custom-control-input"
                                 type="checkbox"
                                 id="sugesCheck"
-                                defaultChecked={true}
                                 onClick={(e) => {
                                     handleSuges(W, H);
                                 }}
