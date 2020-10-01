@@ -274,8 +274,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "leftKnee";
                 });
-                correctPoints.keypoints.push(
-                    correctPos(point1[0], element, 354, 362, 79, 514, lefty)
+                correctPoints.keypoints.push(//514
+                    correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "rightAnkle") {
                 const point1 = posesJson.keypoints.filter((part) => {
@@ -308,8 +308,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "rightKnee";
                 });
-                correctPoints.keypoints.push(
-                    correctPos(point1[0], element, 354, 362, 79, 514, lefty)
+                correctPoints.keypoints.push(//514
+                    correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "leftAnkle") {
                 const point1 = posesJson.keypoints.filter((part) => {
@@ -337,6 +337,12 @@ function correctPoints(posesJson, instrumento, lefty) {
 function Posture(instrumento) {
     const [H, setH] = useState(519);
     const [W, setW] = useState(692);
+    let theta;
+    if (instrumento.instrumento == "GUITAR") {
+        theta = 25;
+    } else {
+        theta = 0;
+    }
 
     const [lefty, setLefty] = useState(false);
 
@@ -568,7 +574,7 @@ function Posture(instrumento) {
                                             edgePoint(posesJson, "y", "min")
                                         }
                                         fill="None"
-                                        stroke={Evaluation(errorJson)}
+                                        stroke={Evaluation(errorJson, theta)}
                                         stroke-width={5}
                                     />
                                 </svg>
@@ -579,8 +585,8 @@ function Posture(instrumento) {
                             <canvas ref={canvasRef} width={W} height={H} />
                             <canvas ref={correctRef} width={W} height={H} />
                         </div>
-                        <h1>{EvalHead(errorJson)}</h1>
-                        <p>{EvalMsg(errorJson)}</p>
+                        <h1>{EvalHead(errorJson, theta)}</h1>
+                        <p>{EvalMsg(errorJson, theta)}</p>
                     </div>
                 </Col>
                 <Col md={3}>
