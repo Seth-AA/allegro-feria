@@ -357,8 +357,8 @@ function Posture(instrumento) {
 
     const [errorJson, setErrorJson] = useState({ error: -1, keypoints: [] });
 
-    const [skeletonWatch, setSkeletonWatch] = useState(false);
-    const [skeletonSuges, setSkeletonSuges] = useState(true);
+    const [skeletonWatch, setSkeletonWatch] = useState(true);
+    const [skeletonSuges, setSkeletonSuges] = useState(false);
 
     const canvasRef = useRef(null);
     const correctRef = useRef(1);
