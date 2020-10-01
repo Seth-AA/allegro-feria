@@ -274,8 +274,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "leftKnee";
                 });
-                correctPoints.keypoints.push(
-                    correctPos(point1[0], element, 354, 362, 79, 514, lefty)
+                correctPoints.keypoints.push(//514
+                    correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "rightAnkle") {
                 const point1 = posesJson.keypoints.filter((part) => {
@@ -308,8 +308,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "rightKnee";
                 });
-                correctPoints.keypoints.push(
-                    correctPos(point1[0], element, 354, 362, 79, 514, lefty)
+                correctPoints.keypoints.push(//514
+                    correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "leftAnkle") {
                 const point1 = posesJson.keypoints.filter((part) => {
