@@ -15,119 +15,230 @@ import {
 
 import { Container, Row, Col, Button } from "react-bootstrap";
 
-function correctPointsViolin(posesJson) {
+function correctPointsViolin(posesJson, lefty) {
     const points = posesJson.keypoints;
     var correctPoints = {
         score: posesJson.score,
         keypoints: [],
     };
-    points.forEach((element, index) => {
-        var x, y;
-        if (element.part == "rightShoulder") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "leftShoulder";
-            });
-            x = element.position.x;
-            y = point1[0].position.y;
-            correctPoints.keypoints.push({
-                position: { x, y },
-                part: "rightShoulder",
-                score: 1,
-            });
-        } else if (element.part == "leftElbow") {
-            const pointW = posesJson.keypoints.filter((part) => {
-                return part.part == "leftWrist";
-            });
-            const pointS = posesJson.keypoints.filter((part) => {
-                return part.part == "leftShoulder";
-            });
-            if (pointW[0].part.y < pointS[0].position.y) {
+    if (lefty) {
+        points.forEach((element, index) => {
+            var x, y;
+            if (element.part == "leftShoulder") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightShoulder";
+                });
                 x = element.position.x;
-                y = 99;
+                y = point1[0].position.y;
                 correctPoints.keypoints.push({
                     position: { x, y },
-                    part: "leftElbow",
+                    part: "leftShoulder",
                     score: 1,
                 });
+            } else if (element.part == "rightElbow") {
+                const pointW = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightWrist";
+                });
+                const pointS = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightShoulder";
+                });
+                if (pointW[0].part.y < pointS[0].position.y) {
+                    x = element.position.x;
+                    y = element.position.y + 70;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightElbow",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
+            } else if (element.part == "rightWrist") {
+                const pointS = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightShoulder";
+                });
+                if (element.position.y - pointS[0].position.x > 30) {
+                    x = element.position.x;
+                    y = pointS[0].position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightWrist",
+                        score: 1,
+                    });
+                } else if (element.position.x > pointS[0].position.x) {
+                    x = 2 * pointS[0].position.x - element.position.x;
+                    y = element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightWrist",
+                        score: 1,
+                    });
+                } else if (element.position.y < pointS[0].position.y) {
+                    x = element.position.x;
+                    y = pointS[0].position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightWrist",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
+            } else if (element.part == "leftElbow") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftShoulder";
+                });
+                if (element.position.y < point1[0].position.y) {
+                    x = element.position.x;
+                    y = 2 * point1[0].position.y - element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftElbow",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
+            } else if (element.part == "leftWrist") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "nose";
+                });
+                const point2 = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftElbow";
+                });
+                if (element.position.y < point1[0].position.y) {
+                    x = element.position.x;
+                    y = 519 - element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftWrist",
+                        score: 1,
+                    });
+                } else if (element.position.x > point2[0].position.x) {
+                    x = 2 * point2[0].position.x - element.position.x;
+                    y = element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftWrist",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
             } else {
                 correctPoints.keypoints.push(element);
             }
-        } else if (element.part == "leftWrist") {
-            const pointS = posesJson.keypoints.filter((part) => {
-                return part.part == "leftShoulder";
-            });
-            if (element.position.y - pointS[0].position.x > 30) {
+        });
+    } else {
+        points.forEach((element, index) => {
+            var x, y;
+            if (element.part == "rightShoulder") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftShoulder";
+                });
                 x = element.position.x;
-                y = pointS[0].position.y;
+                y = point1[0].position.y;
                 correctPoints.keypoints.push({
                     position: { x, y },
-                    part: "leftWrist",
+                    part: "rightShoulder",
                     score: 1,
                 });
-            } else if (element.position.x < pointS[0].position.x) {
-                x = 2 * pointS[0].position.x - element.position.x;
-                y = element.position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "leftWrist",
-                    score: 1,
+            } else if (element.part == "leftElbow") {
+                const pointW = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftWrist";
                 });
-            } else if (element.position.y < pointS[0].position.y) {
-                x = element.position.x;
-                y = pointS[0].position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "leftWrist",
-                    score: 1,
+                const pointS = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftShoulder";
                 });
+                if (pointW[0].part.y < pointS[0].position.y) {
+                    x = element.position.x;
+                    y = element.position.y + 70;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftElbow",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
+            } else if (element.part == "leftWrist") {
+                const pointS = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftShoulder";
+                });
+                if (element.position.y - pointS[0].position.x > 30) {
+                    x = element.position.x;
+                    y = pointS[0].position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftWrist",
+                        score: 1,
+                    });
+                } else if (element.position.x < pointS[0].position.x) {
+                    x = 2 * pointS[0].position.x - element.position.x;
+                    y = element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftWrist",
+                        score: 1,
+                    });
+                } else if (element.position.y < pointS[0].position.y) {
+                    x = element.position.x;
+                    y = pointS[0].position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "leftWrist",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
+            } else if (element.part == "rightElbow") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightShoulder";
+                });
+                if (element.position.y < point1[0].position.y) {
+                    x = element.position.x;
+                    y = 2 * point1[0].position.y - element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightElbow",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
+            } else if (element.part == "rightWrist") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "nose";
+                });
+                const point2 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightElbow";
+                });
+                if (element.position.y < point1[0].position.y) {
+                    x = element.position.x;
+                    y = 519 - element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightWrist",
+                        score: 1,
+                    });
+                } else if (element.position.x < point2[0].position.x) {
+                    x = 2 * point2[0].position.x - element.position.x;
+                    y = element.position.y;
+                    correctPoints.keypoints.push({
+                        position: { x, y },
+                        part: "rightWrist",
+                        score: 1,
+                    });
+                } else {
+                    correctPoints.keypoints.push(element);
+                }
             } else {
                 correctPoints.keypoints.push(element);
             }
-        } else if (element.part == "rightElbow") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "rightShoulder";
-            });
-            if (element.position.y < point1[0].position.y) {
-                x = element.position.x;
-                y = 2 * point1[0].position.y - element.position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "rightElbow",
-                    score: 1,
-                });
-            } else {
-                correctPoints.keypoints.push(element);
-            }
-        } else if (element.part == "rightWrist") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "nose";
-            });
-            const point2 = posesJson.keypoints.filter((part) => {
-                return part.part == "rightElbow";
-            });
-            if (element.position.y < point1[0].position.y) {
-                x = element.position.x;
-                y = 519 - element.position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "rightWrist",
-                    score: 1,
-                });
-            } else if (element.position.x < point2[0].position.x) {
-                x = 2 * point2[0].position.x - element.position.x;
-                y = element.position.y;
-                correctPoints.keypoints.push({
-                    position: { x, y },
-                    part: "rightWrist",
-                    score: 1,
-                });
-            } else {
-                correctPoints.keypoints.push(element);
-            }
-        } else {
-            correctPoints.keypoints.push(element);
-        }
-    });
+        });
+    }
+
     correctPoints.keypoints = correctPoints.keypoints.reduce((unique, o) => {
         if (!unique.some((obj) => obj.part === o.part)) {
             unique.push(o);
@@ -143,48 +254,83 @@ function correctPointsGuitar(posesJson, lefty) {
         score: posesJson.score,
         keypoints: [],
     };
-    points.forEach((element, index) => {
-        if (element.part == "leftWrist") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "rightWrist";
-            });
-            correctPoints.keypoints.push(
-                correctPos(point1[0], element, 310, 190, 202, 242)
-            );
-        } else if (element.part == "leftElbow") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "rightElbow";
-            });
-            correctPoints.keypoints.push(
-                correctPos(point1[0], element, 276, 236, 144, 217)
-            );
-        } else if (element.part == "leftKnee") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "rightKnee";
-            });
-            correctPoints.keypoints.push(
-                correctPos(point1[0], element, 354, 362, 79, 514)
-            );
-        } else if (element.part == "leftAnkle") {
-            const point1 = posesJson.keypoints.filter((part) => {
-                return part.part == "rightAnkle";
-            });
-            correctPoints.keypoints.push(
-                correctPos(point1[0], element, 323, 574, 168, 655)
-            );
-        } else {
-            correctPoints.keypoints.push(element);
-        }
-    });
-
+    if (lefty) {
+        points.forEach((element, index) => {
+            if (element.part == "rightWrist") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftWrist";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 310, 190, 202, 242, lefty)
+                );
+            } else if (element.part == "rightElbow") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftElbow";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 276, 236, 144, 217, lefty)
+                );
+            } else if (element.part == "rightKnee") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "leftKnee";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 354, 362, 79, 514, lefty)
+                );
+            } else if (element.part == "rightAnkle") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightAnkle";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 323, 574, 168, 655, lefty)
+                );
+            } else {
+                correctPoints.keypoints.push(element);
+            }
+        });
+    } else {
+        points.forEach((element, index) => {
+            if (element.part == "leftWrist") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightWrist";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 310, 190, 202, 242, lefty)
+                );
+            } else if (element.part == "leftElbow") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightElbow";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 276, 236, 144, 217, lefty)
+                );
+            } else if (element.part == "leftKnee") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightKnee";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 354, 362, 79, 514, lefty)
+                );
+            } else if (element.part == "leftAnkle") {
+                const point1 = posesJson.keypoints.filter((part) => {
+                    return part.part == "rightAnkle";
+                });
+                correctPoints.keypoints.push(
+                    correctPos(point1[0], element, 323, 574, 168, 655, lefty)
+                );
+            } else {
+                correctPoints.keypoints.push(element);
+            }
+        });
+    }
     return correctPoints;
 }
 
-function correctPoints(posesJson, instrumento) {
+function correctPoints(posesJson, instrumento, lefty) {
     if (instrumento.instrumento == "VIOLIN") {
-        return correctPointsViolin(posesJson);
+        return correctPointsViolin(posesJson, lefty);
     } else if (instrumento.instrumento == "GUITAR") {
-        return correctPointsGuitar(posesJson);
+        return correctPointsGuitar(posesJson, lefty);
     }
 }
 
@@ -341,6 +487,7 @@ function Posture(instrumento) {
                                 id="Diestra"
                                 name="gender"
                                 value="Diestra"
+                                defaultChecked={true}
                                 onClick={(e) => {
                                     setLefty(false);
                                 }}
@@ -386,7 +533,8 @@ function Posture(instrumento) {
                                         setPosesJson(poses[0]);
                                         const newCP = correctPoints(
                                             poses[0],
-                                            instrumento
+                                            instrumento,
+                                            lefty
                                         );
                                         setCorrectPosesJson(newCP);
                                         setErrorJson(Error(poses[0], newCP));

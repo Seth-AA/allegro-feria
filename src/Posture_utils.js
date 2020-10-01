@@ -343,32 +343,30 @@ export function EvalMsg(errorJson) {
     }
 }
 
-export function correctPos(partLeft, partRight, x1, y1, x2, y2, lefty = false) {
+export function correctPos(partLeft, partRight, x1, y1, x2, y2, lefty) {
     if (lefty) {
-        x1 = -x1;
-        x2 = -x2;
-        const temp = partLeft;
-        partLeft = partRight;
-        partRight = temp;
+        x1 = -x1 + 340;
+        x2 = -x2 + 340;
     }
-
     const m1 = (y2 - y1) / (x2 - x1);
-    //var n1 = y1 - m1 * x1;
 
-    //var m2 = -1 / m1;
-    //var n2;
     const R = distance(
         partLeft.position.x,
         partLeft.position.y,
         partRight.position.x,
         partRight.position.y
     );
-    const x = partLeft.position.x + R * Math.cos(Math.atan(m1));
-    const y = partLeft.position.y + R * Math.sin(Math.atan(m1));
-    //n2 = parseInt(point.position.y, 10) - m2 * parseInt(point.position.x, 10);
-    //x = (n1 - n2) / (m2 - m1);
-    //y = (m2 * (n1 - n2)) / (m2 - m1) + n2;
 
+    let x;
+    let y;
+
+    if (!lefty) {
+        x = partLeft.position.x + R * Math.cos(Math.atan(m1));
+        y = partLeft.position.y + R * Math.sin(Math.atan(m1));
+    } else {
+        x = partLeft.position.x - R * Math.cos(Math.atan(m1));
+        y = partLeft.position.y - R * Math.sin(Math.atan(m1));
+    }
     const correctPoint2 = {
         position: { x, y },
         part: partRight.part,
