@@ -1,7 +1,7 @@
 export default {
     background: "#355584",
     statusMap: {
-        selected: "rgb(0, 0, 0)",
+        selected: "#031837",
         unselected: "white ",
         "1P": "#1a0500",
         "2m": "#4d0f00",
@@ -22,10 +22,10 @@ export default {
         4: "rgb(205, 240, 247)",
         5: "rgb(242, 246, 247)",
     },
-    fontSize: 12,
-    color: "#1f447b !important",
+    fontSize: 14,
+    color: "#fff !important",
     dimensions: {
-        openWidth: 14,
+        openWidth: 16,
         nutWidth: 0.75,
         stringHeight: 30,
     },
