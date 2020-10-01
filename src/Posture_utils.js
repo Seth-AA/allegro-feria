@@ -171,11 +171,12 @@ export function Error(posesJson, correctPosesJson) {
     }
 }
 
-export function Evaluation(errorJson) {
+export function Evaluation(errorJson, theta = 0) {
     try {
         if (errorJson.error == -1) {
             return "black";
         }
+
         var errorEval = "black";
         var no_yel_flag = true;
         var no_red_flag = true;
@@ -198,15 +199,15 @@ export function Evaluation(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 80) {
+            if (error > 80 + theta) {
                 errorEval = "red";
                 no_red_flag = false;
             }
-            if (error > 40 && no_red_flag) {
+            if (error > 40 + theta && no_red_flag) {
                 errorEval = "yellow";
                 no_yel_flag = false;
             }
-            if (error < 40 && no_red_flag && no_yel_flag) {
+            if (error < 40 + theta && no_red_flag && no_yel_flag) {
                 errorEval = "green";
             }
         });
