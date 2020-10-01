@@ -24,9 +24,9 @@ export default function App() {
                         <Nav.Link href="/bpm-finder" className="navi">
                             Ritmo
                         </Nav.Link>
-                        <Nav.Link href="/posture-static" className="navi">
+                        {/* <Nav.Link href="/posture-static" className="navi">
                             Prueba estática
-                        </Nav.Link>
+                        </Nav.Link> */}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
@@ -40,9 +40,9 @@ export default function App() {
                 <Route path="/posture-analyzer">
                     <PosPractice />
                 </Route>
-                <Route path="/posture-static">
+                {/* <Route path="/posture-static">
                     <StaticPosture />
-                </Route>
+                </Route> */}
                 <Route path="">
                     <PosPractice />
                 </Route>
