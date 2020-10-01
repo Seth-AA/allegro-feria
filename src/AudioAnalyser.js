@@ -19,6 +19,8 @@ class AudioAnalyser extends Component {
         this.keyDetector = this.keyDetector.bind(this);
     }
 
+    //Esta función re-renderiza
+    // "no influye en la detección de bpm"
     keyDetector(event) {
         switch (event.keyCode) {
             case 49:
@@ -35,11 +37,14 @@ class AudioAnalyser extends Component {
         }
     }
 
+    //Esta función re-renderiza
     componentDidMount() {
         document.addEventListener("keydown", this.keyDetector, false);
         this.audioContext = new (window.AudioContext ||
             window.webkitAudioContext)();
         this.analyser = this.audioContext.createAnalyser();
+
+        //ahi dice "bin"
         this.dataArray = new Float32Array(this.analyser.frequencyBinCount);
         this.source = this.audioContext.createMediaStreamSource(
             this.props.audio
@@ -54,14 +59,38 @@ class AudioAnalyser extends Component {
         this.source.connect(this.scriptProcessorNode);
         this.scriptProcessorNode.connect(this.audioContext.destination);
         this.onAudioProcess = new RealTimeBPMAnalyzer({
+            // estos son solo parametros
             scriptNode: {
                 bufferSize: 4096 * 2 * 2,
                 numberOfInputChannels: 1,
                 numberOfOutputChannels: 1,
             },
-            computeBPMDelay: 1000,
+            
+            // Default: 2000,
+            // idk, pero parece que mayor permite mayor variacion
+            stabilizedBpmCount: 20000,
+            
+            //computeBPMDelay: 1000,
+            
+            // Default: 10000
+            // ni idea que hace... 
+            // valores altos, la variacion es pequeña y no parece funcionar muy bien 1000000
+            // valores bajor, la variacion es mayor, pero la precicion tampoco es alta 100
+            computeBPMDelay: 20000,
+
+            // Default: 20000
+            //tiempo en que demora en estabilizarse?
+            // tiempo en que demora en cambiar:
+            // valores grandes cambia mucho, valores pequeños cambia poco
+            stabilizationTime: 1000000000000000,
+            
+            
             continuousAnalysis: true,
-            pushTime: 600,
+
+            //pushTime: 600,
+            // Default: 2000
+            pushTime: 700,        
+            
             pushCallback: (err, bpm2) => {
                 if (bpm2 && bpm2.length) {
                     const new_tempo = bpm2[0].tempo;
@@ -79,7 +108,11 @@ class AudioAnalyser extends Component {
 
                     // const diff = (bpm2[0].tempo - this.state.currentBPM) / 4;
                     const diff = (next_tempo - this.state.currentBPM) / 4;
+
+                    //Aqui re-renderiza !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                     this.setState({
+                        // el bpm ahora es todo lo anterior + el "currentBPM"
                         bpm: [
                             ...this.state.bpm,
                             Math.round(this.state.currentBPM),
@@ -96,6 +129,9 @@ class AudioAnalyser extends Component {
         };
     }
 
+    //Esta función re-renderiza
+    // Por lo que se ve esta solo es una función de animación,
+    // no afecta al bpm
     tick() {
         this.analyser.getFloatTimeDomainData(this.dataArray);
         this.setState({
@@ -103,55 +139,93 @@ class AudioAnalyser extends Component {
         });
         this.rafId = requestAnimationFrame(this.tick);
     }
+
+    //No afecta bpm
     componentWillUnmount() {
         cancelAnimationFrame(this.rafId);
         this.analyser.disconnect();
         this.source.disconnect();
     }
 
+    //Esta función re-renderiza
     fillState(newState) {
         this.setState(newState);
     }
+
+
     render() {
+        // reducer es una funcion implicita que suma los dos valores de entrada
         const reducer = (accumulator, currentValue) =>
             accumulator + currentValue;
+
+        const avg_history_size = 4;
+
+        //es el promedio de los ultimos 10 valores 
         const average = Math.round(
-            this.state.bpm.slice(-10).reduce(reducer) /
-                Math.min(10, this.state.bpm.length)
+            //bpm es un arreglo inicializado: [0]
+            // un .reduce aplica una función "reductora" a un arreglo entregando un solo valor
+            // en este caso entrega la suma de los ultimos 10 valores
+            // y lo divide entre el largo del arreglo bpm o avg_history_size
+            this.state.bpm.slice(-avg_history_size).reduce(reducer) /
+                Math.min(avg_history_size, this.state.bpm.length)
         );
-        var diff = this.state.currentBPM - average;
+        
+        //diff entonces es la diferencia entre el BPM actual y el promedio de las últimas 10 mediciones
+        //var diff = this.state.currentBPM - average;
+        var diff = average - this.state.currentBPM;
+
+        //funcion para fijar un valor entre dos extremos
         function clamp(num, min, max) {
             return num <= min ? min : num >= max ? max : num;
         }
+
+        // el percent será un número entre 0 y 100
+        // ni idea que es 46-diff... ver en que se usa percent
         const percent = clamp(46 - diff, 0, 100);
         const images = [
             require("./assets/images/turtle.svg"),
             require("./assets/images/rabbit.svg"),
             require("./assets/images/ok.svg"),
         ];
+
+        //parametro para hacer las variaciones mas faciles
+        const comp = 10;
+
+        //aqui se define cual de las 3 imagenes se usara
+        //si la diferencia es mayor a 10, entonces tortuga,
+        // si es menor a 10, entonces conejo,
+        //sino un ok
         const image =
-            diff > 10 ? images[0] : diff < -10 ? images[1] : images[2];
+            diff > comp ? images[0] : diff < -comp ? images[1] : images[2];
+
+        // aqui sucede lo mismo de antes con las imagenes, pero ahora con texto
         const imageState =
-            diff > 10
+            diff > comp
                 ? "Estas frenando"
-                : diff < -10
+                : diff < -comp
                 ? "Estas acelerando"
                 : "Bien!";
+
+        //why tf se vuelve a hacer round xd
         diff = Math.round(diff);
+
+        //Vista
+
+        //Literal lo unico relevante que observar aquí abajo es el "this.state.currentBPM"
         return (
             <div className="col-6 boxed" style={{ margin: "0 auto" }}>
-                {this.state.showBpm ? (
+                {this.state.showBpm ? ( // Si mostrarlo es true, se muestra, sino ""
                     <div
                         className="current-bpm"
                         style={{
                             animation: `pulse ${
-                                60 / this.state.currentBPM
+                                60 / this.state.currentBPM //Simplemente usa el BPM actual para "palpitar"
                             }s infinite`,
                             color: "#dfe6e9",
                             marginTop: "4%",
                         }}
                     >
-                        {Math.round(this.state.currentBPM)}
+                        {Math.round(this.state.currentBPM)} {/*Es el BPM que se muestra, por defecto es 0*/}
                         <p style={{ fontSize: "25px", paddingBottom: "5px" }}>
                             BPM
                         </p>
