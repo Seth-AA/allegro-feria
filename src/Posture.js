@@ -274,7 +274,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "leftKnee";
                 });
-                correctPoints.keypoints.push(//514
+                correctPoints.keypoints.push(
+                    //514
                     correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "rightAnkle") {
@@ -308,7 +309,8 @@ function correctPointsGuitar(posesJson, lefty) {
                 const point1 = posesJson.keypoints.filter((part) => {
                     return part.part == "rightKnee";
                 });
-                correctPoints.keypoints.push(//514
+                correctPoints.keypoints.push(
+                    //514
                     correctPos(point1[0], element, 354, 362, 79, 460, lefty)
                 );
             } else if (element.part == "leftAnkle") {
@@ -355,8 +357,8 @@ function Posture(instrumento) {
 
     const [errorJson, setErrorJson] = useState({ error: -1, keypoints: [] });
 
-    const [skeletonWatch, setSkeletonWatch] = useState(false);
-    const [skeletonSuges, setSkeletonSuges] = useState(true);
+    const [skeletonWatch, setSkeletonWatch] = useState(true);
+    const [skeletonSuges, setSkeletonSuges] = useState(false);
 
     const canvasRef = useRef(null);
     const correctRef = useRef(1);
@@ -430,6 +432,12 @@ function Posture(instrumento) {
 
 {detalles ? Coordinates(correctPosesJson) : ""}
 */
+    const posePower = {
+        decodingMethod: "single-person",
+        architecture: "ResNet50",
+        outputStride: 32,
+        quantBytes: 4,
+    };
     return (
         <Container fluid>
             <Row>
@@ -458,6 +466,7 @@ function Posture(instrumento) {
                                 className="custom-control-input"
                                 type="checkbox"
                                 id="skeletonCheck"
+                                defaultChecked={true}
                                 onClick={(e) => {
                                     handleSkeleton(W, H);
                                 }}
@@ -493,7 +502,6 @@ function Posture(instrumento) {
                                 id="Diestra"
                                 name="gender"
                                 value="Diestra"
-                                defaultChecked={true}
                                 onClick={(e) => {
                                     setLefty(false);
                                 }}
@@ -527,12 +535,13 @@ function Posture(instrumento) {
                             <PoseNet
                                 height={H}
                                 width={W}
-                                frameRate={30}
+                                frameRate={15}
                                 inferenceConfig={{
                                     decodingMethod: "single-person",
-                                    architecture: "ResNet50",
-                                    outputStride: 32,
-                                    quantBytes: 4,
+                                    architecture: "MobileNetV1",
+                                    outputStride: 8,
+                                    multiplier: 0.5,
+                                    quantBytes: 1,
                                 }}
                                 onEstimate={(poses) => {
                                     try {
