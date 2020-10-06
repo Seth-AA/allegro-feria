@@ -533,8 +533,8 @@ function Posture(instrumento) {
                     <div className="pretty_container_center">
                         <div className="pose img-overlay-wrap">
                             <PoseNet
-                                height={H}
-                                width={W}
+                                height={50}
+                                width={50}
                                 frameRate={15}
                                 inferenceConfig={{
                                     decodingMethod: "single-person",
