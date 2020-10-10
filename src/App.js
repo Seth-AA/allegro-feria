@@ -1,15 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Bpm from "./bpm";
-import PosPractice from "./PosPractice";
-import StaticPosture from "./StaticPosture";
+import Bpm from "./bpm/bpm";
+import PosPractice from "./posture/PosPractice";
+import StaticPosture from "./posture/StaticPosture";
 import Footer from "./Footer";
-import Scales from "./Scales"
+import Scales from "./libs/Scales";
 import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.style.css";
 require("typeface-poppins");
-
 
 export default function App() {
     return (
@@ -27,8 +26,8 @@ export default function App() {
                             Ritmo
                         </Nav.Link>
                         <Nav.Link href="/Scales" className="navi">
-                                Escalas
-                            </Nav.Link>
+                            Escalas
+                        </Nav.Link>
                         {/* <Nav.Link href="/posture-static" className="navi">
                             Prueba estática
                         </Nav.Link> */}
@@ -46,8 +45,8 @@ export default function App() {
                     <PosPractice />
                 </Route>
                 <Route path="/Scales">
-                        <Scales />
-                    </Route>
+                    <Scales />
+                </Route>
                 {/* <Route path="/posture-static">
                     <StaticPosture />
                 </Route> */}

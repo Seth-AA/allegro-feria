@@ -352,7 +352,7 @@ function Posture() {
     const example = useMemo(() => {
         const image = new Image();
         image.crossOrigin = "";
-        image.src = require("./assets/images/example.jpg");
+        image.src = require("../assets/images/example.jpg");
         return image;
     }, []);
 

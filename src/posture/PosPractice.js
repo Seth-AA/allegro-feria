@@ -21,8 +21,8 @@ class PosPractice extends Component {
 
     render() {
         const images = [
-            require("./assets/images/guitarSelect.svg"),
-            require("./assets/images/violinSelect.svg"),
+            require("../assets/images/guitarSelect.svg"),
+            require("../assets/images/violinSelect.svg"),
         ];
         return (
             <div>
