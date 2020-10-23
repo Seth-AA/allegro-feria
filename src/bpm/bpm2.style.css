@@ -1,0 +1,29 @@
+.container {
+  max-width: 600px;
+  padding: 20px;
+  border: 2px solid #1f447b;
+  border-radius: 15px;
+  background-color: #2e5a98;
+}
+
+.current-bpm {
+  background-color: #1f447b;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  font-size: 60pt;
+  padding-top: 30px;
+  border-radius: 100%;
+  margin: auto;
+}
+
+.fmedium {
+  font-size: medium;
+}
+
+.panel-history {
+  background-color: #1f447b;
+  min-height: 150px;
+  border-radius: 5px !important;
+  margin-top: 10%;
+}

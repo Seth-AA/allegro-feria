@@ -16,7 +16,7 @@ const Analyzer2 = (props) => {
             console.log(tempo);
           })
           .catch((err) => {
-            console.error('no pudo');
+            console.error(err);
           });
       });
     };
@@ -32,28 +32,11 @@ const Analyzer2 = (props) => {
       const blob = new Blob(chunks);
       convertBlobToAudioBuffer(blob);
     };
-    setTimeout(() => recorder.stop(), 10000); // we'll have a 5s media file
+    setTimeout(() => recorder.stop(), 5000); // we'll have a 5s media file
     recorder.start();
   };
 
-  setInterval(() => recordAndSend(props.audio), 1000);
-
-  //   recorder.start(2000);
-  //   recorder.addEventListener('dataavailable', (event) => {
-  //     const blob = new Blob([event.data]);
-  //     var url = URL.createObjectURL(blob);
-  //     fetch(url)
-  //       .then((response) => {
-  //         return response.arrayBuffer();
-  //       })
-  //       .then((arrayBuffer) => {
-  //         console.log(arrayBuffer);
-  //         audioContext
-  //           .decodeAudioData(arrayBuffer)
-  //           .then((decoded) => console.log(decoded));
-  //       });
-  //   });
-
+  setInterval(() => recordAndSend(props.audio), 5000);
   return <div></div>;
 };
 

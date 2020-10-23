@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import AudioAnalyser from './AudioAnalyser';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Line from './Linegraph';
+import ExampleData from './ExampleData';
 
 class Bpm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       audio: null,
+      globalBpm: [],
     };
     this.toggleMicrophone = this.toggleMicrophone.bind(this);
     this.getMicrophone = this.getMicrophone.bind(this);
     this.stopMicrophone = this.stopMicrophone.bind(this);
+    this.appendBpm = this.appendBpm.bind(this);
   }
 
   async getMicrophone() {
@@ -26,6 +30,13 @@ class Bpm extends Component {
     this.state.audio.getTracks().forEach((track) => track.stop());
     this.setState({ audio: null });
   }
+
+  appendBpm(newBpm) {
+    const list = this.state.globalBpm.concat(newBpm);
+    this.setState({ globalBpm: list });
+    console.log(this.state.globalBpm);
+  }
+
   toggleMicrophone() {
     if (this.state.audio) {
       this.stopMicrophone();
@@ -37,14 +48,14 @@ class Bpm extends Component {
   render() {
     return (
       <div>
+        <div style={{ height: '800px' }}>
+          <Line data={ExampleData} />
+        </div>
         <div>
           {this.state.audio ? (
-            <AudioAnalyser audio={this.state.audio} />
+            <AudioAnalyser audio={this.state.audio} updateParent={this.appendBpm} />
           ) : (
-            <div
-              className='col-6 boxed'
-              style={{ margin: '0 auto', height: '622px' }}
-            >
+            <div className='col-6 boxed' style={{ margin: '0 auto', height: '622px' }}>
               <div
                 className='current-bpm'
                 style={{
@@ -74,9 +85,6 @@ class Bpm extends Component {
                 ></div>
               </div>
               <div className='flex-row boxed panel-history'> </div>
-              <svg height='100' width='440'>
-                <line x1='0' y1='50' x2='440' y2='50' />
-              </svg>
             </div>
           )}
         </div>
@@ -88,12 +96,7 @@ class Bpm extends Component {
             margin: '0 auto',
           }}
         >
-          <Button
-            style={{ margin: '10px' }}
-            variant='success'
-            onClick={this.getMicrophone}
-            disabled={this.state.audio}
-          >
+          <Button style={{ margin: '10px' }} variant='success' onClick={this.getMicrophone} disabled={this.state.audio}>
             Comenzar
           </Button>
           <Button
