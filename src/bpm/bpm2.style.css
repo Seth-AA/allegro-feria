@@ -1,4 +1,4 @@
-.container {
+/* .container {
   max-width: 600px;
   padding: 20px;
   border: 2px solid #1f447b;
@@ -27,3 +27,22 @@
   border-radius: 5px !important;
   margin-top: 10%;
 }
+
+.history-item {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  color: #fff;
+  border: 2px solid #1f447b;
+  border-radius: 15px;
+  background-color: #3d7ed8;
+}
+
+.flex {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+} */

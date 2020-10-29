@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import AudioAnalyser from './AudioAnalyser';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,6 +11,8 @@ class Bpm extends Component {
     this.state = {
       audio: null,
       globalBpm: [],
+      visibleGraph: false,
+      safeArray: [],
     };
     this.toggleMicrophone = this.toggleMicrophone.bind(this);
     this.getMicrophone = this.getMicrophone.bind(this);
@@ -23,17 +25,36 @@ class Bpm extends Component {
       audio: true,
       video: false,
     });
-    this.setState({ audio });
+    this.setState({ audio, visibleGraph: false, globalBpm: [] });
   }
 
   stopMicrophone() {
     this.state.audio.getTracks().forEach((track) => track.stop());
-    this.setState({ audio: null });
+    this.setState({
+      safeArray: [
+        { id: 'bpm', data: this.state.globalBpm.map((cur, ind) => ({ x: ind, y: cur })) },
+        // {
+        //   id: 'bpm',
+        //   data: [
+        //     { x: 1, y: 1 },
+        //     { x: 2, y: 2 },
+        //     { x: 3, y: 3 },
+        //   ],
+        // },
+      ],
+    });
+    console.log(this.state.globalBpm);
+    console.log(this.state.safeArray);
+    this.setState({ audio: null, visibleGraph: true });
   }
 
   appendBpm(newBpm) {
     const list = this.state.globalBpm.concat(newBpm);
     this.setState({ globalBpm: list });
+    console.log(this.state.globalBpm);
+  }
+
+  componentDidMount() {
     console.log(this.state.globalBpm);
   }
 
@@ -47,10 +68,7 @@ class Bpm extends Component {
 
   render() {
     return (
-      <div>
-        <div style={{ height: '800px' }}>
-          <Line data={ExampleData} />
-        </div>
+      <Fragment>
         <div>
           {this.state.audio ? (
             <AudioAnalyser audio={this.state.audio} updateParent={this.appendBpm} />
@@ -96,7 +114,12 @@ class Bpm extends Component {
             margin: '0 auto',
           }}
         >
-          <Button style={{ margin: '10px' }} variant='success' onClick={this.getMicrophone} disabled={this.state.audio}>
+          <Button
+            style={{ margin: '10px' }}
+            variant='success'
+            onClick={this.getMicrophone}
+            disabled={this.state.audio}
+          >
             Comenzar
           </Button>
           <Button
@@ -108,7 +131,14 @@ class Bpm extends Component {
             Detener
           </Button>
         </div>
-      </div>
+        {this.state.visibleGraph ? (
+          <div style={{ height: '800px', width: '100%' }}>
+            <Line data={this.state.safeArray}></Line>
+          </div>
+        ) : (
+          ''
+        )}
+      </Fragment>
     );
   }
 }

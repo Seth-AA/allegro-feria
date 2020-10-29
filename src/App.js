@@ -2,7 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Bpm from './bpm/bpm';
 import Bpm2 from './bpm/bpm2';
+import Media from './beat-analyzer/Media';
 import PosPractice from './posture/PosPractice';
+// import PosPractice from './posture/PosPractice';
 import StaticPosture from './posture/StaticPosture';
 import Footer from './Footer';
 import Scales from './libs/Scales';
@@ -29,12 +31,10 @@ export default function App() {
             <Nav.Link href='/Scales' className='navi'>
               Escalas
             </Nav.Link>
-            {/* <Nav.Link href="/posture-static" className="navi">
-                            Prueba estática
-                        </Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+
       <Switch>
         <Route path='/bpm-finder'>
           <Bpm />
@@ -42,6 +42,11 @@ export default function App() {
         <Route path='/tempo-analyzer'>
           <Bpm2 />
         </Route>
+
+        <Route path='/bpm-analyser'>
+          <Media />
+        </Route>
+
         <Route path='/posture-analyzer'>
           <PosPractice />
         </Route>

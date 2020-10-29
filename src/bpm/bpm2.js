@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, useMemo } from 'react';
-import Analyzer from './Analizer2';
+// import Analyzer from './Analizer2';
 import Wave from './Wave/Wave';
 import AudioScript from './AudioScript';
 import './bpm2.style.css';
@@ -7,7 +7,7 @@ import './bpm2.style.css';
 const Bpm2 = () => {
   const [audio, setAudio] = useState(null);
   const [bpm, setBpm] = useState(90);
-  const [history, setHistory] = useState([0]);
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     console.log(audio);
@@ -28,9 +28,7 @@ const Bpm2 = () => {
 
   const updateBpm = (newBpm) => {
     setBpm(newBpm[0].tempo);
-    const list = history.concat(15);
-    setHistory(list);
-    console.log(history);
+    setHistory((prev) => [newBpm[0].tempo, ...prev]);
   };
 
   return (
@@ -41,10 +39,15 @@ const Bpm2 = () => {
           <p className='fmedium'>BPM</p>
         </div>
         <div>bpm bar</div>
-        <button onClick={() => updateBpm(15)}>botonazo</button>
-        <div className='panel-history'></div>
+        <div className='panel-history flex flex-wrap'>
+          {history.slice(0, 20).map((elem, idx) => (
+            <div className='history-item center' key={idx}>
+              {elem}
+            </div>
+          ))}
+        </div>
         <Wave audio={audio}></Wave>
-        {audio ? <AudioScript audio={audio} pushCall={updateBpm} /> : ''}
+        {audio ? <AudioScript key={Math.random()} audio={audio} pushCall={updateBpm} /> : ''}
       </div>
       <button onClick={audio ? stopMic : getMic}>{audio ? 'Detener' : 'Grabar'}</button>
     </Fragment>

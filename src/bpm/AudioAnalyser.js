@@ -43,7 +43,11 @@ class AudioAnalyser extends Component {
     this.source = this.audioContext.createMediaStreamSource(this.props.audio);
     this.source.connect(this.analyser);
     this.rafId = requestAnimationFrame(this.tick);
-    this.scriptProcessorNode = this.audioContext.createScriptProcessor(4096 * 2 * 2, 1, 1);
+    this.scriptProcessorNode = this.audioContext.createScriptProcessor(
+      4096 * 2 * 2,
+      1,
+      1
+    );
     this.source.connect(this.scriptProcessorNode);
     this.scriptProcessorNode.connect(this.audioContext.destination);
     this.onAudioProcess = new RealTimeBPMAnalyzer({
@@ -86,7 +90,9 @@ class AudioAnalyser extends Component {
           const diff = (next_tempo - this.state.currentBPM) / 4;
           this.setState({
             bpm: [...this.state.bpm, Math.round(this.state.currentBPM)],
-            currentBPM: this.state.currentBPM ? this.state.currentBPM + diff : bpm2[0].tempo,
+            currentBPM: this.state.currentBPM
+              ? this.state.currentBPM + diff
+              : bpm2[0].tempo,
           });
           this.props.updateParent(Math.round(this.state.currentBPM));
         }
@@ -115,7 +121,9 @@ class AudioAnalyser extends Component {
   }
   render() {
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    const average = Math.round(this.state.bpm.slice(-10).reduce(reducer) / Math.min(10, this.state.bpm.length));
+    const average = Math.round(
+      this.state.bpm.slice(-10).reduce(reducer) / Math.min(10, this.state.bpm.length)
+    );
     var diff = -this.state.currentBPM + average;
     function clamp(num, min, max) {
       return num <= min ? min : num >= max ? max : num;
@@ -127,7 +135,8 @@ class AudioAnalyser extends Component {
       require('../assets/images/ok.svg'),
     ];
     const image = diff > 10 ? images[0] : diff < -10 ? images[1] : images[2];
-    const imageState = diff > 10 ? 'Estas frenando' : diff < -10 ? 'Estas acelerando' : 'Bien!';
+    const imageState =
+      diff > 10 ? 'Estas frenando' : diff < -10 ? 'Estas acelerando' : 'Bien!';
     diff = Math.round(diff);
     return (
       <div className='col-6 boxed' style={{ margin: '0 auto' }}>
@@ -158,12 +167,18 @@ class AudioAnalyser extends Component {
               height: 'auto',
             }}
           >
-            {this.state.bpm.length > 1 ? <img width='50px' height='50px' src={image} alt='Italian Trulli'></img> : ''}
+            {this.state.bpm.length > 1 ? (
+              <img width='50px' height='50px' src={image} alt='Italian Trulli'></img>
+            ) : (
+              ''
+            )}
           </div>
           {this.state.bpm.length > 1 ? (
             <p style={{ textAlign: 'center' }}>{imageState}</p>
           ) : (
-            <p style={{ textAlign: 'center', paddingTop: '25px' }}>{'Procesando ritmo...'}</p>
+            <p style={{ textAlign: 'center', paddingTop: '25px' }}>
+              {'Procesando ritmo...'}
+            </p>
           )}
         </div>
         {this.state.historial ? (
@@ -179,7 +194,13 @@ class AudioAnalyser extends Component {
           ''
         )}
 
-        <div className=''>{this.state.oscilograma ? <AudioVisualiser audioData={this.state.audioData} /> : ''}</div>
+        <div className=''>
+          {this.state.oscilograma ? (
+            <AudioVisualiser audioData={this.state.audioData} />
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     );
   }

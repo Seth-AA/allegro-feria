@@ -7,6 +7,16 @@ import { ResponsiveLine } from '@nivo/line';
 // you'll often use just a few of them.
 const MyResponsiveLine = ({ data }) => (
   <ResponsiveLine
+    // data={[
+    //   {
+    //     id: 'stats',
+    //     data: [
+    //       { x: 1, y: 1 },
+    //       { x: 2, y: 2 },
+    //       { x: 1, y: 1 },
+    //     ],
+    //   },
+    // ]}
     data={data}
     margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
     xScale={{ type: 'point' }}
