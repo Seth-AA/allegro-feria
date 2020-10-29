@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Analyser from './Analyser';
 import './Media.css';
 import Visualiser from './Visualiser';
+import { Button } from 'react-bootstrap';
 
 const Media = (props) => {
   const [mediaStream, setMediaStream] = useState(null);
@@ -45,11 +46,25 @@ const Media = (props) => {
               <div key={key}>{elem}</div>
             ))}
         </div>
-        {recording ? <Visualiser mediaStream={mediaStream} /> : ''}
+        {/* {recording ? <Visualiser mediaStream={mediaStream} /> : ''} */}
 
         <div>
-          <button onClick={startRecording}>Comenzar</button>
-          <button onClick={stopRecording}>Detener</button>
+          <Button
+            style={{ margin: '10px' }}
+            variant='success'
+            onClick={startRecording}
+            disabled={recording}
+          >
+            Comenzar
+          </Button>
+          <Button
+            style={{ margin: '10px' }}
+            variant='danger'
+            onClick={stopRecording}
+            disabled={!recording}
+          >
+            Detener
+          </Button>
         </div>
       </div>
     </Fragment>

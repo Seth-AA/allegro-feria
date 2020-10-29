@@ -28,6 +28,7 @@ const Analyser = ({ mediaStream, pushCall }) => {
       onAudioProcess.analyze(e);
     };
     return () => {
+      console.log('cleaning analyser');
       source.disconnect();
       scriptProcessorNode.disconnect();
       scriptProcessorNode.onAudioProcess = null;

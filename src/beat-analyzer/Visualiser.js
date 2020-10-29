@@ -1,34 +1,29 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 
 const Visualiser = ({ mediaStream }) => {
-  // const refCanvas = useRef();
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioContext.createMediaStreamSource(mediaStream);
   const analyser = audioContext.createAnalyser();
-  analyser.fftSize = 2048;
-  source.connect(analyser);
   const bufferLength = analyser.frequencyBinCount;
-  // console.log('buffersize' + bufferLength + 'otra cosa' + analyser.fftSize);
-  const [dataArray, setDataArray] = useState(new Float32Array(bufferLength));
-  // let tempArray = new Float32Array(bufferLength);
+  const [dataArray, setDataArray] = useState(new Uint8Array(bufferLength));
+
+  let rafId;
 
   const updateArray = () => {
-    let tempArray = new Float32Array(analyser.frequencyBinCount);
-    analyser.getFloatTimeDomainData(tempArray);
+    let tempArray = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteTimeDomainData(tempArray);
     setDataArray(tempArray);
+    rafId = requestAnimationFrame(updateArray);
   };
 
-  // useEffect(() => {
-  //   console.log(dataArray.slice(0, 20));
-  // }, [dataArray]);
-
   useEffect(() => {
-    const refInterval = setInterval(updateArray, 1000);
+    source.connect(analyser);
+    // const refInterval = setInterval(updateArray, 1000 / 15);
+    rafId = requestAnimationFrame(updateArray);
     return () => {
-      source.disconnect();
-      analyser.disconnect();
-      // cancelAnimationFrame(requestId);
-      clearInterval(refInterval);
+      source.disconnect(analyser);
+      cancelAnimationFrame(rafId);
+      // clearInterval(refInterval);
     };
   }, []);
 
@@ -58,7 +53,11 @@ const Oscilogram = ({ data }) => {
     context.strokeStyle = '#000000';
     context.lineTo(0, height / 2);
 
-    console.log(data.slice(0, 20));
+    for (const item of data) {
+      const y = 100 * (item / 255);
+      context.lineTo(x, y);
+      x += sliceWidth;
+    }
 
     context.lineTo(width, height / 2);
     context.stroke();
