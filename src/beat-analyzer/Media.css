@@ -43,7 +43,7 @@
 }
 
 .container {
-  max-width: 650px;
+  max-width: 650px !important;
   padding: 20px;
   border: 2px solid #1f447b;
   border-radius: 15px;
