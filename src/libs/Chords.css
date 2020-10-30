@@ -1,0 +1,12 @@
+.acordes {
+    display: inline-block;
+}
+.acordes > svg {
+    height: 33%;
+    width: 33%;
+}
+
+.catalogo {
+    background: #fff;
+    border-radius: 10px;
+}

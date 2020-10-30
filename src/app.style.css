@@ -1,0 +1,17 @@
+body {
+    background: #355584;
+    font-family: "Poppins";
+    color: #fff !important;
+}
+.navo {
+    padding-left: 2.5%;
+    color: #fff !important;
+}
+.navi {
+    color: #fff !important;
+    font-size: larger;
+    margin-right: 10px;
+}
+.navi:hover {
+    color: #e5e5e5 !important;
+}
