@@ -1,22 +1,21 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 
 const Visualiser = ({ mediaStream }) => {
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  const source = audioContext.createMediaStreamSource(mediaStream);
-  const analyser = audioContext.createAnalyser();
-  const bufferLength = analyser.frequencyBinCount;
-  const [dataArray, setDataArray] = useState(new Uint8Array(bufferLength));
-
-  let rafId;
-
-  const updateArray = () => {
-    let tempArray = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteTimeDomainData(tempArray);
-    setDataArray(tempArray);
-    rafId = requestAnimationFrame(updateArray);
-  };
-
+  const [dataArray, setDataArray] = useState(new Uint8Array([]));
+  
   useEffect(() => {
+    const updateArray = () => {
+      let tempArray = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteTimeDomainData(tempArray);
+      setDataArray(tempArray);
+      rafId = requestAnimationFrame(updateArray);
+    };
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(mediaStream);
+    const analyser = audioContext.createAnalyser();
+    // const bufferLength = analyser.frequencyBinCount;
+    
+    let rafId;
     source.connect(analyser);
     // const refInterval = setInterval(updateArray, 1000 / 15);
     rafId = requestAnimationFrame(updateArray);

@@ -56,10 +56,10 @@ class AudioAnalyser extends Component {
         numberOfInputChannels: 1,
         numberOfOutputChannels: 1,
       },
-      computeBPMDelay: 2000,
+      computeBPMDelay: 100,
       continuousAnalysis: true,
-      stabilizationTime: 100000000000,
-      pushTime: 600,
+      stabilizationTime: 1000000,
+      pushTime: 1000,
       pushCallback: (err, bpm2) => {
         if (bpm2 && bpm2.length) {
           console.log(bpm2[0]);

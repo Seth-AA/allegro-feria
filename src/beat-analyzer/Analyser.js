@@ -1,22 +1,22 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import RealTimeBPMAnalyzer from 'realtime-bpm-analyzer';
 
 const Analyser = ({ mediaStream, pushCall }) => {
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  const source = audioContext.createMediaStreamSource(mediaStream);
-  const scriptProcessorNode = audioContext.createScriptProcessor(4096 * 4, 1, 1);
-
   useEffect(() => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(mediaStream);
+    const scriptProcessorNode = audioContext.createScriptProcessor(4096, 1, 1);
+    let indexBuffer = [];
     let onAudioProcess = new RealTimeBPMAnalyzer({
       scriptNode: {
-        bufferSize: 4096 * 4,
+        bufferSize: 4096,
         numberOfInputChannels: 1,
         numberOfOutputChannels: 1,
       },
-      computeBPMDelay: 2000,
+      // computeBPMDelay: 4000,
       continuousAnalysis: true,
-      stabilizationTime: 100000000000,
-      pushTime: 600,
+      // stabilizationTime: 50000,
+      pushTime: 1000,
       pushCallback: (err, bpm) => {
         if (bpm) pushCall(bpm[0].tempo);
       },
