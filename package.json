@@ -15,6 +15,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "2.1.8",
+    "react-select": "^3.1.0",
     "realtime-bpm-analyzer": "^1.1.2",
     "styled-components": "^2.2.1",
     "typeface-poppins": "0.0.72"
