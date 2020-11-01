@@ -50,7 +50,7 @@ const Media = (props) => {
       ) : (
         ''
       )}
-      <div className='container'>
+      <div className='containerBPM'>
         <div className='current-bpm'>
           {history.slice(-1)[0]}
           <p className='fmedium'>BPM</p>
