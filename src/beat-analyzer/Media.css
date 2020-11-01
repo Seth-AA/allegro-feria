@@ -55,13 +55,10 @@
   background: linear-gradient(90deg, #a9c9ff 0%, #fd8787 100%);
   margin: 10px;
   border-radius: 5px;
-  /* padding: 10px; */
 }
 
 .medidor-image {
   position: relative;
   width: 50px;
   height: 50px;
-  /* left: -40%; */
-  /* background-color: green; */
 }

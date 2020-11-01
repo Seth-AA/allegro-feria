@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 
 const Visualiser = ({ mediaStream }) => {
   const [dataArray, setDataArray] = useState(new Uint8Array([]));
-  
+
   useEffect(() => {
     const updateArray = () => {
       let tempArray = new Uint8Array(analyser.frequencyBinCount);
@@ -13,18 +13,14 @@ const Visualiser = ({ mediaStream }) => {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const source = audioContext.createMediaStreamSource(mediaStream);
     const analyser = audioContext.createAnalyser();
-    // const bufferLength = analyser.frequencyBinCount;
-    
     let rafId;
     source.connect(analyser);
-    // const refInterval = setInterval(updateArray, 1000 / 15);
     rafId = requestAnimationFrame(updateArray);
     return () => {
       source.disconnect(analyser);
       cancelAnimationFrame(rafId);
-      // clearInterval(refInterval);
     };
-  }, []);
+  }, [mediaStream]);
 
   return (
     <Fragment>
