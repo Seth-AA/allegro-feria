@@ -1,5 +1,6 @@
 .acordes {
     display: inline-block;
+    color: black;
 }
 .acordes > svg {
     height: 33%;
@@ -53,4 +54,9 @@
 
 .sufijo > b {
     margin-bottom: 0.25em;
+}
+
+.spin {
+    margin: auto;
+    margin-top: 20%;
 }

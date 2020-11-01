@@ -1,17 +1,42 @@
 import React, { Component, useState } from "react";
 import Select from 'react-select'
-import makeAnimated from 'react-select/animated';
 import Chord from '@tombatossals/react-chords/lib/Chord'
 import DBC from './DBC.json' 
 import "./Chords.css";
-
+import ReactLoading from 'react-loading';
 import { Row, Col, Container,ToggleButtonGroup,ToggleButton  } from "react-bootstrap";
 
 
 function Chords (){
+
+    const [root, setRoot] = useState("E");
+    const [suffix, setSuffix] = useState({ value: "major", label: 'mayor' });
+
+    const handleRoot = (val) => setRoot(val);
+    const handleSuffix = (val) => setSuffix(val);
+
     const findChords = (root,suf) =>{
-        const acorde = DBC.chords[root].filter((chord, index) => {return chord.suffix == suf})
-        return acorde[0];
+        if (root == "Todos" && suf == "Todos"){
+            const acorde = DBC.chords;
+            return acorde;
+        }
+        else if (root == "Todos" && suf != "Todos") {
+            const acorde = {};
+            Object.keys(DBC.chords).map((r, index) => 
+                {
+                    acorde[r] = DBC.chords[r].filter((chord,index) => {return chord.suffix == suf})
+                }
+            );
+            return acorde;
+        }
+        else if (suf == "Todos" && root != "Todos"){
+            const acorde = DBC.chords[root]
+            return acorde;
+        }
+        else{
+            const acorde = DBC.chords[root].filter((chord, index) => {return chord.suffix == suf})
+            return acorde[0];
+        }
     }
     const drawChords = (root, suf) => {
         const listChord = findChords(root, suf);
@@ -25,18 +50,56 @@ function Chords (){
             }
         }
         const lite = false // defaults to false if omitted
-        return  <div className="acordes">   
-                    {
-                        listChord.positions.map((chord, index) => 
+        if (root == "Todos"){
+            return  <div className="acordes">   
+                        {
+                            Object.keys(listChord).map((r, index) => 
                             {
-                                return <Chord
+                                return listChord[r].map((suffix, index) => {return suffix.positions.map((chord, index) => 
+                                    {
+                                        return  <Chord
+                                                    chord={chord}
+                                                    instrument={instrument}
+                                                    lite={lite}
+                                                />
+                                    })
+                                })  
+                            }) 
+                        }
+                    </div>            
+        }
+        else if (suf == "Todos" && root != "Todos"){
+            return  <div className="acordes">   
+                        {
+                            listChord.map((suffix, index) => 
+                            {
+                                return suffix.positions.map((chord, index) => 
+                                {
+                                    return  <Chord
                                                 chord={chord}
                                                 instrument={instrument}
                                                 lite={lite}
-                                        />
-                            })  
-                    }
-                </div>
+                                            />
+                                })  
+                            }) 
+                        }
+                    </div>
+        }
+        else {
+            return  <div className="acordes">   
+                        {
+                            listChord.positions.map((chord, index) => 
+                                {
+                                    return <Chord
+                                                    chord={chord}
+                                                    instrument={instrument}
+                                                    lite={lite}
+                                            />
+                                })  
+                        }
+                    </div>
+        }
+
     }
     const options = [
         { value: "Todos", label: 'Todos' },
@@ -131,15 +194,15 @@ function Chords (){
                         <h2 className="title">Librería de Acordes</h2>
                     </Row>
                     <Row>
-                        <ToggleButtonGroup type="radio" name="options" defaultValue={"Todos"} className="notas">
+                        <ToggleButtonGroup type="radio" name="options" value={root} onChange={handleRoot} className="notas">
                             <ToggleButton value={"Todos"}>Todos</ToggleButton>
                             <ToggleButton value={"C"}>C</ToggleButton>
-                            <ToggleButton value={"C#"}>C#/D♭</ToggleButton>
+                            <ToggleButton value={"Csharp"}>C#/D♭</ToggleButton>
                             <ToggleButton value={"D"}>D</ToggleButton>
                             <ToggleButton value={"Eb"}>D#/E♭</ToggleButton>
                             <ToggleButton value={"E"}>E</ToggleButton>
                             <ToggleButton value={"F"}>F</ToggleButton>
-                            <ToggleButton value={"F#"}>F#/G♭</ToggleButton>
+                            <ToggleButton value={"Fsharp"}>F#/G♭</ToggleButton>
                             <ToggleButton value={"G"}>G</ToggleButton>
                             <ToggleButton value={"Ab"}>G#/A♭</ToggleButton>
                             <ToggleButton value={"A"}>A</ToggleButton>
@@ -150,10 +213,10 @@ function Chords (){
                     <Row>
                         <Col md={2} className="sufijo">
                             <b>Tipo:</b>
-                            <Select options={options} styles={customStyles} defaultValue = {options[0]}/>
+                            <Select options={options} styles={customStyles} value={suffix} onChange={handleSuffix} />
                         </Col>
                         <Col md={10}>
-                            {drawChords("B","major")}
+                            {drawChords(root,suffix.value)}
                         </Col>
                     </Row>
             </Container>
