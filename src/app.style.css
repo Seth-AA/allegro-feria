@@ -12,9 +12,9 @@ body {
     color: #fff !important;
     font-size: larger;
     margin-right: 10px;
+    background-color: #355584 !important;
+    border-color: #355584 !important;
 }
 .navi:hover {
     color: #e5e5e5 !important;
-    background-color: #355584 !important;
-    border-color: #355584 !important;
 }
