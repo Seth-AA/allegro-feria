@@ -28,6 +28,7 @@
     background: #fff;
     border-radius: 10px;
     min-height: 40em;
+    cursor: default;
 }
 
 .title {
