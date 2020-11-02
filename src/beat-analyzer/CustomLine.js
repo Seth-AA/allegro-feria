@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { ResponsiveLine } from '@nivo/line';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CustomLine = ({ data }) => {
   const chart = [
@@ -8,9 +9,50 @@ const CustomLine = ({ data }) => {
       data: Array.from(data, (x, i) => ({ x: i, y: x })),
     },
   ];
+
+  const mode = (array) => {
+    if (array.length == 0) return null;
+    var modeMap = {};
+    var maxEl = array[0],
+      maxCount = 1;
+    for (var i = 0; i < array.length; i++) {
+      var el = array[i];
+      if (modeMap[el] == null) modeMap[el] = 1;
+      else modeMap[el]++;
+      if (modeMap[el] > maxCount) {
+        maxEl = el;
+        maxCount = modeMap[el];
+      }
+    }
+    return maxEl;
+  };
+
+  const longest = (array) => {
+    let bestFound = 1;
+    let si, sj, i, j;
+    for (i = 0; i < array.length; i++) {
+      const a = array[i];
+      let count = 0;
+      for (j = i; j < array.length; j++) {
+        const b = array[j];
+        if (Math.abs(a - b) > 6 || j == array.length - 1) {
+          count = j - i;
+          break;
+        }
+      }
+      if (count > bestFound) {
+        bestFound = count;
+        si = i;
+        sj = j;
+      }
+    }
+    return { data: bestFound, i: si, j: sj };
+  };
+  const longestRender = longest(data);
+
   return (
     <Fragment>
-      <div style={{ height: '600px', width: '800px' }}>
+      <div style={{ height: '600px', width: '800px' }} className='container-xl bg-info'>
         <ResponsiveLine
           data={chart}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
@@ -36,6 +78,15 @@ const CustomLine = ({ data }) => {
           theme={{ textColor: 'white' }}
         />
       </div>
+
+      <div class='panel panel-default'>
+        <div class='panel-body'>
+          <div>Velocidad mas tocada {mode(data)}</div>
+        </div>
+      </div>
+
+      <div>Mayor tiempo en promedio {longestRender.data}</div>
+      <div>Intervalo {data.slice(longestRender.i, longestRender.j).toString()}</div>
     </Fragment>
   );
 };

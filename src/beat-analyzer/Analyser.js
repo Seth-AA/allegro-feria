@@ -6,7 +6,7 @@ const Analyser = ({ mediaStream, pushCall }) => {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const source = audioContext.createMediaStreamSource(mediaStream);
     const scriptProcessorNode = audioContext.createScriptProcessor(4096 * 2, 1, 1);
-    let indexBuffer = [];
+    // let indexBuffer = [];
     let onAudioProcess = new RealTimeBPMAnalyzer({
       scriptNode: {
         bufferSize: 4096 * 2,
