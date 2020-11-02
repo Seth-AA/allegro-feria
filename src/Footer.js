@@ -6,7 +6,7 @@ import "./fontawesome/css/all.min.css";
 
 function Footer() {
     return (
-        <Container fluid>
+        <Container fluid >
             <section class="social-media">
                 <div class="social-media-wrap">
                     <div class="footer-logo">

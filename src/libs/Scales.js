@@ -36,7 +36,7 @@ class Scales extends Component {
 
     render() {
         return (
-            <Container fluid>
+            <Container fluid className="containerScale">
                 <Row className="sel">
                     <Col md={{ span: 6, offset: 3 }}>
                         <form onSubmit={this.handleSubmit}>

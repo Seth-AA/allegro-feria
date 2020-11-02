@@ -1,58 +1,56 @@
 .img-overlay-wrap {
-    position: relative;
     display: inline-block; /* <= shrinks container to image size */
+    position: relative;
     transition: transform 150ms ease-in-out;
+    width: 100%;
 }
 
 .img-overlay-wrap svg {
     position: absolute;
-    margin-top: 20px;
-    margin-left: 20px;
+    top: 5.5%;
+    left: 10%;
 }
 
 .img-overlay-wrap canvas {
     position: absolute;
     top: 5.5%;
-    left: 3.5%;
+    left: 5%;
+    right: 5%;
+    border-radius: 30px;
 }
 
 .pretty_container_center {
     background: #1f447b;
     margin: 20px 0px 20px 0px;
-    height: 640px;
+    height: 68vh;
     border-radius: 10px;
 }
 
-.pretty_container_center > h1 {
-    display: block;
-    padding-top: 525px;
+.pretty_container_center > h2 {
+    position: absolute;
     text-align: center;
     align-items: center;
     color: #fff;
     font-weight: normal;
-    font-size: 35px;
+    font-size: 2em;
+    margin-bottom: 2.5em;
+    left: 50%;
+    bottom: 0;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 .pretty_container_center > p {
-    display: block;
-    padding-top: 0px;
+    display: absolute;
     text-align: center;
     align-items: center;
     color: #fff;
     font-weight: normal;
     font-size: 25px;
-}
-
-.pog {
-    position: absolute;
-    margin-left: 20px;
-    margin-bottom: 35px;
+    margin-bottom: 1.75em;
+    left: 50%;
     bottom: 0;
-}
-
-.pose {
-    text-align: center;
-    align-items: center;
-    margin: auto;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 
 .options {
@@ -63,7 +61,7 @@
     background: #1f447b;
     margin: 20px 40px 20px 40px;
     padding: 15px;
-    height: 640px;
+    height: 68vh;
     border-radius: 10px;
 }
 .pretty_container_left > h4 {
@@ -80,16 +78,24 @@
     margin-left: -15px;
 }
 
+.pretty_container_left > a {
+    position: absolute;
+    margin-bottom: 40px;
+    left: 50%;
+    bottom: 0;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
 .asd {
     margin-bottom: 25px !important;
 }
 
-.container {
+.containerPosture {
     display: block;
     position: relative;
     padding-left: 35px;
     margin-bottom: 12px;
-    cursor: pointer;
+    cursor: default;
     font-size: medium;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -105,9 +111,7 @@
 }
 
 /* Hide the browser's default checkbox */
-.container input {
-    position: absolute;
-    opacity: 0;
+.containerPosture input {
     cursor: pointer;
     height: 0;
     width: 0;
@@ -124,12 +128,12 @@
 }
 
 /* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
+.containerPosture:hover input ~ .checkmark {
     background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container input:checked ~ .checkmark {
+.containerPosture input:checked ~ .checkmark {
     background-color: #82c0ff;
 }
 
@@ -141,12 +145,12 @@
 }
 
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+.containerPosture input:checked ~ .checkmark:after {
     display: block;
 }
 
 /* Style the checkmark/indicator */
-.container .checkmark:after {
+.containerPosture .checkmark:after {
     left: 9px;
     top: 5px;
     width: 5px;

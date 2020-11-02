@@ -27,7 +27,8 @@
 .catalogo {
     background: #fff;
     border-radius: 10px;
-    min-height: 40em;
+    min-width: 690px !important;
+    min-height: 70vh !important;
     cursor: default;
 }
 
@@ -38,6 +39,7 @@
 }
 
 .notas {
+    display: inline-block !important;
     margin-top: 0.5em;
     margin-left: 1.5em;
     padding-right: 0.75em;
@@ -68,6 +70,7 @@
 
 .sufijo {
     margin-top: 0.75em;
+    margin-bottom: 1em;
     color: #444444 !important;
 }
 

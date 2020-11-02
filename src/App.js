@@ -40,7 +40,6 @@ export default function App() {
         <Route path='/bpm-analyser'>
           <Media />
         </Route>
-
         <Route path='/posture-analyzer'>
           <PosPractice />
         </Route>
@@ -54,7 +53,7 @@ export default function App() {
           <PosPractice />
         </Route>
       </Switch>
-      <Footer />
+      <Footer/>
     </Router>
   );
 }

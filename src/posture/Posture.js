@@ -337,8 +337,8 @@ function correctPoints(posesJson, instrumento, lefty) {
 }
 
 function Posture(instrumento) {
-    const [H, setH] = useState(519);
-    const [W, setW] = useState(692);
+    const H = 540*window.screen.height/1080
+    const W = 720*window.screen.width/1920
     let theta;
     if (instrumento.instrumento == "GUITAR") {
         theta = 25;
@@ -439,7 +439,7 @@ function Posture(instrumento) {
         quantBytes: 4,
     };
     return (
-        <Container fluid>
+        <Container fluid className="containerPosture">
             <Row>
                 <Col md={3}>
                     <div className="pretty_container_left">
@@ -505,6 +505,7 @@ function Posture(instrumento) {
                                 onClick={(e) => {
                                     setLefty(false);
                                 }}
+                                checked
                             />
                             <label for="Diestra">Diestra</label>
                             <br />
@@ -523,7 +524,6 @@ function Posture(instrumento) {
                         <Button
                             variant="outline-light"
                             href="/posture-analyzer"
-                            className="pog"
                         >
                             Cambiar instrumento
                         </Button>
@@ -531,7 +531,7 @@ function Posture(instrumento) {
                 </Col>
                 <Col md={6}>
                     <div className="pretty_container_center">
-                        <div className="pose img-overlay-wrap">
+                        <div className="img-overlay-wrap">
                             <PoseNet
                                 height={H}
                                 width={W}
@@ -594,7 +594,7 @@ function Posture(instrumento) {
                             <canvas ref={canvasRef} width={W} height={H} />
                             <canvas ref={correctRef} width={W} height={H} />
                         </div>
-                        <h1>{EvalHead(errorJson, theta)}</h1>
+                        <h2>{EvalHead(errorJson, theta)}</h2>
                         <p>{EvalMsg(errorJson, theta)}</p>
                     </div>
                 </Col>

@@ -23,3 +23,7 @@
 .scalo {
     padding-left: 20px !important;
 }
+
+.containerScale {
+    min-height: 69vh;
+}
