@@ -39,7 +39,7 @@ class Scales extends Component {
             <Container fluid className="containerScale">
                 <Row className="sel">
                     <Col md={{ span: 6, offset: 3 }}>
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit} className="unbased">
                             <label className="root">
                                 Elige una nota:
                                 <select
@@ -48,16 +48,16 @@ class Scales extends Component {
                                 >
                                     <option value="E">E</option>
                                     <option value="F">F</option>
-                                    <option value="F#">F#/Gb</option>
+                                    <option value="F#">F#/G♭</option>
                                     <option value="G">G</option>
-                                    <option value="G#">G#/Ab</option>
+                                    <option value="G#">G#/A♭</option>
                                     <option value="A">A</option>
-                                    <option value="A#">A#/Bb</option>
+                                    <option value="A#">A#/B♭</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
-                                    <option value="C#">C#/Db</option>
+                                    <option value="C#">C#/D♭</option>
                                     <option value="D">D</option>
-                                    <option value="D#">D#/Eb</option>
+                                    <option value="D#">D#/E♭</option>
                                 </select>
                             </label>
 
