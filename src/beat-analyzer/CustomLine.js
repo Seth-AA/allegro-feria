@@ -1,11 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './CustomLine.styles.css';
 
 const CustomLine = ({ data }) => {
   const chart = [
     {
       id: Math.random().toString(),
+      color: '#hsl(18,54,47)',
       data: Array.from(data, (x, i) => ({ x: i, y: x })),
     },
   ];
@@ -49,44 +51,66 @@ const CustomLine = ({ data }) => {
     return { data: bestFound, i: si, j: sj };
   };
   const longestRender = longest(data);
+  const repeated = (data.length - [...new Set(data)].length) / data.length;
+  console.log(repeated);
 
   return (
     <Fragment>
-      <div style={{ height: '600px', width: '800px' }} className='container-xl bg-info'>
-        <ResponsiveLine
-          data={chart}
-          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-          yScale={{ type: 'linear', min: 60, max: 170, stacked: true, reverse: false }}
-          axisTop={null}
-          axisRight={null}
-          curve='basis'
-          pointSize={10}
-          lineWidth={2}
-          useMesh={true}
-          enableGridX={false}
-          axisBottom={null}
-          enablePoints={chart[0].data.length > 20 ? false : true}
-          axisLeft={{
-            orient: 'left',
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'Tiempo',
-            legendOffset: -40,
-            legendPosition: 'middle',
-          }}
-          theme={{ textColor: 'white' }}
-        />
-      </div>
+      <div className='grid-container'>
+        <div
+          style={{ height: '600px', width: '800px' }}
+          className='container container-chart'
+        >
+          <ResponsiveLine
+            data={chart}
+            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            yScale={{ type: 'linear', min: 60, max: 170, stacked: true, reverse: false }}
+            axisTop={null}
+            axisRight={null}
+            curve='basis'
+            pointSize={10}
+            lineWidth={8}
+            useMesh={true}
+            enableGridX={false}
+            axisBottom={null}
+            pointColor='#daa72f'
+            enablePoints={chart[0].data.length > 20 ? false : true}
+            axisLeft={{
+              orient: 'left',
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: 'Tempo [BPM]',
+              legendOffset: -50,
+              legendPosition: 'middle',
+            }}
+            theme={{
+              fontSize: '18px',
+              textColor: '#c6e6e8',
+              grid: { line: { stroke: '#335b6d' } },
+            }}
+            // colors={{ scheme: 'nivo' }}
+            borderColor='#c55a2d'
+            isInteractive={false}
+          />
+        </div>
 
-      <div class='panel panel-default'>
-        <div class='panel-body'>
-          <div>Velocidad mas tocada {mode(data)}</div>
+        <div className='container-chart' style={{ maxWidth: '600px' }}>
+          <div className='card-info'>Tempo mas tocado </div>
+          <div className='card-info-number'>{mode(data)}[BPM]</div>
+
+          <div className='card-info'>Mejor tiempo tocando constante</div>
+          <div className='card-info-number'>{longestRender.data}[s]</div>
+
+          <div className='card-info'>Porcentaje total tocando constante </div>
+          <div className='card-info-number'>{Math.round(100 * repeated, 2)}%</div>
+
+          <div className='card-info'>MAXIMO Y MINIMO</div>
+          <div className='card-info-number'>
+            {Math.min(...data)}-{Math.max(...data)}
+          </div>
         </div>
       </div>
-
-      <div>Mayor tiempo en promedio {longestRender.data}</div>
-      <div>Intervalo {data.slice(longestRender.i, longestRender.j).toString()}</div>
     </Fragment>
   );
 };
