@@ -25,16 +25,16 @@
 
 .pretty_container_center > h1 {
     display: block;
-    padding-top: 480px;
+    padding-top: 525px;
     text-align: center;
     align-items: center;
     color: #fff;
     font-weight: normal;
-    font-size: 40px;
+    font-size: 35px;
 }
 .pretty_container_center > p {
     display: block;
-    padding-top: 10px;
+    padding-top: 0px;
     text-align: center;
     align-items: center;
     color: #fff;
@@ -44,7 +44,7 @@
 
 .pog {
     position: absolute;
-    margin-left: 5px;
+    margin-left: 20px;
     margin-bottom: 35px;
     bottom: 0;
 }
@@ -95,6 +95,13 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.radiob {
+    margin-left: 20px;
+}
+.radiob > label {
+    padding-left: 5px;
 }
 
 /* Hide the browser's default checkbox */

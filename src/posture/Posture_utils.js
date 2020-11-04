@@ -171,11 +171,12 @@ export function Error(posesJson, correctPosesJson) {
     }
 }
 
-export function Evaluation(errorJson) {
+export function Evaluation(errorJson, theta = 0) {
     try {
         if (errorJson.error == -1) {
             return "black";
         }
+
         var errorEval = "black";
         var no_yel_flag = true;
         var no_red_flag = true;
@@ -188,7 +189,6 @@ export function Evaluation(errorJson) {
             error = part.error;
             if (part.part == "leftWrist") {
                 lw = true;
-                error = -10;
             }
             if (part.part == "rightWrist") {
                 rw = true;
@@ -199,15 +199,15 @@ export function Evaluation(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 100) {
+            if (error > 80 + theta) {
                 errorEval = "red";
                 no_red_flag = false;
             }
-            if (error > 50 && no_red_flag) {
+            if (error > 40 + theta && no_red_flag) {
                 errorEval = "yellow";
                 no_yel_flag = false;
             }
-            if (error < 50 && no_red_flag && no_yel_flag) {
+            if (error < 40 + theta && no_red_flag && no_yel_flag) {
                 errorEval = "green";
             }
         });
@@ -219,7 +219,7 @@ export function Evaluation(errorJson) {
     }
 }
 
-export function EvalHead(errorJson) {
+export function EvalHead(errorJson, theta = 0) {
     try {
         if (errorJson.error == -1) {
             return "Identificando pose...";
@@ -236,7 +236,6 @@ export function EvalHead(errorJson) {
             error = part.error;
             if (part.part == "leftWrist") {
                 lw = true;
-                error = -10;
             }
             if (part.part == "rightWrist") {
                 rw = true;
@@ -247,15 +246,15 @@ export function EvalHead(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 100) {
+            if (error > 80 + theta) {
                 errorEval = "Postura inadecuada";
                 no_red_flag = false;
             }
-            if (error > 50 && no_red_flag) {
+            if (error > 40 + theta && no_red_flag) {
                 errorEval = "Postura mejorable";
                 no_yel_flag = false;
             }
-            if (error < 50 && no_red_flag && no_yel_flag) {
+            if (error < 40 + theta && no_red_flag && no_yel_flag) {
                 errorEval = "¡Buena Postura!";
             }
         });
@@ -290,7 +289,7 @@ function traducir(part) {
     return dict.get(part);
 }
 
-export function EvalMsg(errorJson) {
+export function EvalMsg(errorJson, theta = 0) {
     try {
         if (errorJson.error == -1) {
             return "";
@@ -313,7 +312,6 @@ export function EvalMsg(errorJson) {
             }
             if (part.part == "leftWrist") {
                 lw = true;
-                error = -10;
             }
             if (part.part == "rightWrist") {
                 rw = true;
@@ -324,15 +322,15 @@ export function EvalMsg(errorJson) {
             if (part.part == "rightElbow") {
                 re = true;
             }
-            if (error > 100) {
+            if (error > 80 + theta) {
                 errorEval = "Postura inadecuada";
                 no_red_flag = false;
             }
-            if (error > 50 && no_red_flag) {
+            if (error > 40 + theta && no_red_flag) {
                 errorEval = "Postura mejorable";
                 no_yel_flag = false;
             }
-            if (error < 50 && no_red_flag && no_yel_flag) {
+            if (error < 40 + theta && no_red_flag && no_yel_flag) {
                 errorEval = "¡Buena Postura!";
             }
         });
@@ -346,24 +344,30 @@ export function EvalMsg(errorJson) {
     }
 }
 
-export function correctPos(partLeft, partRight, x1, y1, x2, y2) {
+export function correctPos(partLeft, partRight, x1, y1, x2, y2, lefty) {
+    if (lefty) {
+        x1 = -x1 + 340;
+        x2 = -x2 + 340;
+    }
     const m1 = (y2 - y1) / (x2 - x1);
-    //var n1 = y1 - m1 * x1;
 
-    //var m2 = -1 / m1;
-    //var n2;
     const R = distance(
         partLeft.position.x,
         partLeft.position.y,
         partRight.position.x,
         partRight.position.y
     );
-    const x = partLeft.position.x + R * Math.cos(Math.atan(m1));
-    const y = partLeft.position.y + R * Math.sin(Math.atan(m1));
-    //n2 = parseInt(point.position.y, 10) - m2 * parseInt(point.position.x, 10);
-    //x = (n1 - n2) / (m2 - m1);
-    //y = (m2 * (n1 - n2)) / (m2 - m1) + n2;
 
+    let x;
+    let y;
+
+    if (!lefty) {
+        x = partLeft.position.x + R * Math.cos(Math.atan(m1));
+        y = partLeft.position.y + R * Math.sin(Math.atan(m1));
+    } else {
+        x = partLeft.position.x - R * Math.cos(Math.atan(m1));
+        y = partLeft.position.y - R * Math.sin(Math.atan(m1));
+    }
     const correctPoint2 = {
         position: { x, y },
         part: partRight.part,

@@ -1,0 +1,25 @@
+.sel {
+    padding-top: 30px;
+    height: 120px;
+}
+
+.frotb {
+    height: 180px;
+}
+.huh {
+    padding-top: 60px;
+    margin: auto;
+    text-align: center;
+}
+.huh > b {
+    padding-right: 30px;
+    font-size: 40px;
+}
+
+.root {
+    padding-left: 30px;
+}
+
+.scalo {
+    padding-left: 20px !important;
+}
