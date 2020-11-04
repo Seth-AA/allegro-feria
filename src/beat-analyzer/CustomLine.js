@@ -52,6 +52,7 @@ const CustomLine = ({ data }) => {
   };
   const longestRender = longest(data);
   const repeated = (data.length - [...new Set(data)].length) / data.length;
+  const amountOfChanges = [...new Set(data)].length;
   console.log(repeated);
 
   return (
@@ -102,13 +103,16 @@ const CustomLine = ({ data }) => {
           <div className='card-info'>Mejor tiempo tocando constante</div>
           <div className='card-info-number'>{longestRender.data}[s]</div>
 
-          <div className='card-info'>Porcentaje total tocando constante </div>
+          <div className='card-info'>Porcentaje total del tiempo tocando constante </div>
           <div className='card-info-number'>{Math.round(100 * repeated, 2)}%</div>
 
-          <div className='card-info'>MAXIMO Y MINIMO</div>
+          <div className='card-info'>Mínimo y Máximo durante la práctica</div>
           <div className='card-info-number'>
             {Math.min(...data)}-{Math.max(...data)}
           </div>
+
+          <div className='card-info'>Cantidad de veces que el Tempo cambió</div>
+          <div className='card-info-number'>{amountOfChanges}</div>
         </div>
       </div>
     </Fragment>

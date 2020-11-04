@@ -1,65 +1,83 @@
 :root {
-    --primary1: #2d4671;
-    --primary2: #4b81de;
-    --primary3: #3b70ca;
-    --primary4: #111823;
-    --primary5: #0a0e16;
+  --primary1: #2d4671;
+  --primary2: #4b81de;
+  --primary3: #3b70ca;
+  --primary4: #111823;
+  --primary5: #0a0e16;
 }
 
 .fmedium {
-    font-size: medium;
+  font-size: medium;
 }
 
 .current-bpm {
-    background-color: #1f447b;
-    width: 200px;
-    height: 200px;
-    text-align: center;
-    font-size: 60pt;
-    padding-top: 30px;
-    border-radius: 100%;
-    margin: auto;
+  background-color: #1f447b;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  font-size: 60pt;
+  padding-top: 30px;
+  border-radius: 100%;
+  /* animation: pulse 1s infinite; */
+  margin: auto;
 }
 
 .panel-history {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: 50px 50px;
-    padding: 10px;
-    background-color: #1f447b;
-    border-radius: 8px;
-    border: 2px solid #1f447b;
-    width: 90%;
-    margin: auto;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: 50px 50px;
+  padding: 10px;
+  background-color: #1f447b;
+  border-radius: 8px;
+  border: 2px solid #1f447b;
+  width: 90%;
+  margin: auto;
 }
 
 .panel-history > div {
-    text-align: center;
-    color: #fff;
-    background-color: #3d7ed8;
-    border: 2px solid #1f447b;
-    border-radius: 15px;
-    padding: 10px;
+  text-align: center;
+  color: #fff;
+  background-color: #3d7ed8;
+  border: 2px solid #1f447b;
+  border-radius: 15px;
+  padding: 10px;
 }
 
 .containerBPM {
-    max-width: 650px !important;
-    padding: 20px;
-    border: 2px solid #1f447b;
-    border-radius: 15px;
-    background-color: #2e5a98;
-    margin: auto;
+  max-width: 650px !important;
+  padding: 20px;
+  border: 2px solid #1f447b;
+  border-radius: 15px;
+  background-color: #2e5a98;
+  margin: auto;
 }
 
 .medidor {
-    text-align: center;
-    background: linear-gradient(90deg, #a9c9ff 0%, #fd8787 100%);
-    margin: 10px;
-    border-radius: 5px;
+  text-align: center;
+  background: linear-gradient(90deg, #a9c9ff 0%, #fd8787 100%);
+  margin: 10px;
+  border-radius: 5px;
 }
 
 .medidor-image {
-    position: relative;
-    width: 50px;
-    height: 50px;
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.7);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+
+  80% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.7);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
 }

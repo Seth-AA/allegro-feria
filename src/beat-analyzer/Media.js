@@ -34,6 +34,17 @@ const Media = (props) => {
 
   const stopRecording = () => {
     setRecording(false);
+    let toSave = {
+      date: new Date(),
+      data: history,
+      info: 'lo hizo piola',
+      kind: 'Tempo Ajustado',
+    };
+    let tempoBD = JSON.parse(localStorage.getItem('practices')) || {
+      practices: [],
+    };
+    tempoBD.practices.push(toSave);
+    localStorage.setItem('practices', JSON.stringify(tempoBD));
   };
 
   const updateHistory = (bpm) => {
@@ -52,7 +63,10 @@ const Media = (props) => {
         ''
       )}
       <div className='containerBPM'>
-        <div className='current-bpm'>
+        <div
+          className='current-bpm'
+          style={{ animation: recording ? 'pulse 1s infinite' : '' }}
+        >
           {history.slice(-1)[0]}
           <p className='fmedium'>BPM</p>
         </div>
