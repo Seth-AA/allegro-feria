@@ -483,7 +483,6 @@ function Posture(instrumento) {
                                 className="custom-control-input"
                                 type="checkbox"
                                 id="sugesCheck"
-                                defaultChecked={true}
                                 onClick={(e) => {
                                     handleSuges(W, H);
                                 }}
