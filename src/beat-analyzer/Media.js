@@ -3,6 +3,7 @@ import Analyser from './Analyser';
 import './Media.css';
 import Visualiser from './Visualiser';
 import { Button } from 'react-bootstrap';
+import CustomLine from './CustomLine';
 
 const images = [
   require('../assets/images/turtle.svg'),
@@ -27,7 +28,7 @@ const Media = (props) => {
   }, []);
 
   const startRecording = () => {
-    setHistory([0]);
+    setHistory([90]);
     setRecording(true);
   };
 
@@ -46,7 +47,7 @@ const Media = (props) => {
   return (
     <Fragment>
       {recording && mediaStream ? (
-        <Analyser mediaStream={mediaStream} pushCall={updateHistory} />
+        <Analyser mediaStream={mediaStream} pushCall={updateHistory} k />
       ) : (
         ''
       )}
@@ -88,6 +89,7 @@ const Media = (props) => {
           </Button>
         </div>
       </div>
+      <CustomLine data={history} />
     </Fragment>
   );
 };
