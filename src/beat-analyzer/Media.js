@@ -89,7 +89,11 @@ const Media = (props) => {
           </Button>
         </div>
       </div>
-      <CustomLine data={history} />
+      {!recording && mediaStream && history.length > 2 ? (
+        <CustomLine data={history} />
+      ) : (
+        ''
+      )}
     </Fragment>
   );
 };
