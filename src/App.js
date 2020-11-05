@@ -10,6 +10,8 @@ import Chords from './libs/Chords';
 import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.style.css';
+import Historico from './Historico/Historico';
+
 require('typeface-poppins');
 
 export default function App() {
@@ -21,12 +23,17 @@ export default function App() {
             <img src='/img/allegrowhite.svg' width='50%' />
           </Nav>
           <Nav>
+
             <Nav.Link href='/posture-analyzer' className='navi'>
               Postura
             </Nav.Link>
             <Nav.Link href='/bpm-analyser' className='navi'>
               Ritmo
             </Nav.Link>
+            <Nav.Link href='/historico' className='navi'>
+              Historial
+            </Nav.Link>
+
             <Nav.Link href='/scales' className='navi'>
               Escalas
             </Nav.Link>
@@ -54,11 +61,14 @@ export default function App() {
         <Route path='/chords'>
           <Chords />
         </Route>
+        <Route path='/historico'>
+          <Historico />
+        </Route>
         <Route path=''>
           <PosPractice />
         </Route>
       </Switch>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }

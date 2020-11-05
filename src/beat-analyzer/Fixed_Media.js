@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import Analyser from './Analyser';
 import './Media.css';
 import Visualiser from './Visualiser';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import Fixed_CustomLine from './Fixed_CustomLine';
 
 const images = [
@@ -33,7 +33,7 @@ const Fixed_Media = (props) => {
 
   const startRecording = () => {
     if (fixed_bpm) {
-      setHistory([0]);
+      setHistory([90]);
       setRecording(true);
     } else {
       alert("Debes fijar primero un BPM!");
@@ -43,6 +43,17 @@ const Fixed_Media = (props) => {
 
   const stopRecording = () => {
     setRecording(false);
+    let toSave = {
+      date: new Date(),
+      data: history,
+      info: 'lo hizo piola',
+      kind: 'Tempo Ajustado',
+    };
+    let tempoBD = JSON.parse(localStorage.getItem('practices')) || {
+      practices: [],
+    };
+    tempoBD.practices.push(toSave);
+    localStorage.setItem('practices', JSON.stringify(tempoBD));
   };
 
   const updateHistory = (bpm) => {
@@ -65,24 +76,12 @@ const Fixed_Media = (props) => {
       ) : (
         ''
       )}
-      <div className="containerBPM">
-        <div className="fix_bpm">
-          {fixed_bpm ? (
-            <BPMForm handleChange={handleUpdateFixedBPM} fixed_bpm={fixed_bpm} current={history.slice(-1)[0]} />
-          ) : (
-            <BPMForm handleChange={handleUpdateFixedBPM} />
-          )}
-
-        </div>
-      </div>
       
       <div className='containerBPM'>
-        <div>
-          <button>
-            <Link to="/bpm-analyser">Practicar con un BPM libre</Link>
-          </button>
-        </div>
-        <div className='current-bpm'>
+        <div 
+          className='current-bpm'
+          style={{ animation: recording ? 'pulse 1s infinite' : '' }}
+        >
           {history.slice(-1)[0]}
           <p className='fmedium'>BPM</p>
         </div>
@@ -119,6 +118,13 @@ const Fixed_Media = (props) => {
           </Button>
         </div>
       </div>
+
+      <div className="containerBPM">
+        <div className="fix-bpm">
+          <BPMForm handleChange={handleUpdateFixedBPM} />
+        </div>
+      </div>
+
       {!recording && mediaStream && history.length > 2 ? (
         <Fixed_CustomLine 
           data={history} 
@@ -141,7 +147,7 @@ const Medidor = ({ images, history, fixedBPM }) => {
     diff > 5 ? (diff > 10 ? 'Acelera': "Acelera un poco más") : diff < -5 ? (diff < -10 ? 'Ve más lento': "Ve un poco más lento") : 'Bien!';
   return (
     <Fragment>
-      <p style={{ textAlign: 'center' }}>{fixedBPM}</p>
+      {/* <p style={{ textAlign: 'center' }}>{fixedBPM}</p> */}
       <div className='medidor'>
         <img
           className='medidor-image'
@@ -157,24 +163,17 @@ const Medidor = ({ images, history, fixedBPM }) => {
   );
 };
 
-const BPMForm = ({handleChange, fixed_bpm, current}) => {
+const BPMForm = ({handleChange}) => {
   return(
     <Fragment>
-      {fixed_bpm ? (
-        <p> El BPM escogido como objetivo es: {fixed_bpm} </p>
-      ) : (
-        ""
-      )}
-      
-      <form>
-        <label>
-          BPM: {} {/*Los {} sirven para forzar que haya un espacio xd*/}
-          {/* {fixed_bpm ? "Escoge un nuevo BPM: " : "Escoge un BPM objetivo: "} {}  */}
-          <input type="number" placeholder="60" onChange={handleChange}/>
-        </label>
-        {/* <button type="submit" value="Submit" onClick={handleChange}> Enviar </button> */}
-      </form>
+      <Button variant="light">
+        <Link to="/bpm-analyser">Practicar con un BPM libre</Link>
+      </Button>
 
+      <label>
+        BPM Objetivo: {} {/*Los {} sirven para forzar que haya un espacio xd*/}
+        <Form.Control type="number" placeholder="60" onChange={handleChange}/>
+      </label>
     </Fragment>
   );
 };

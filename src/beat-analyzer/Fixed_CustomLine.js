@@ -57,11 +57,12 @@ const Fixed_CustomLine = ({ data , fixedBPM }) => {
   };
   const longestRender = longest(data);
   const repeated = (data.length - [...new Set(data)].length) / data.length;
+  const amountOfChanges = [...new Set(data)].length;
   console.log(repeated);
 
   return (
     <Fragment>
-      <div className='grid-container'>
+      <div className='container-fluid grid-container'>
         <div
           style={{ height: '600px', width: '800px' }}
           className='container container-chart'
@@ -90,7 +91,8 @@ const Fixed_CustomLine = ({ data , fixedBPM }) => {
               legendPosition: 'middle',
             }}
             theme={{
-              fontSize: '18px',
+              fontSize: '14px',
+              axis: {legend: {text: {fontSize: "20px"}}},
               textColor: '#c6e6e8',
               grid: { line: { stroke: '#335b6d' } },
             }}
@@ -101,19 +103,22 @@ const Fixed_CustomLine = ({ data , fixedBPM }) => {
         </div>
 
         <div className='container-chart' style={{ maxWidth: '600px' }}>
-          <div className='card-info'>Tempo mas tocado </div>
+          <div className='card-info'>Tempo más tocado </div>
           <div className='card-info-number'>{mode(data)}[BPM]</div>
 
           <div className='card-info'>Mejor tiempo tocando constante</div>
           <div className='card-info-number'>{longestRender.data}[s]</div>
 
-          <div className='card-info'>Porcentaje total tocando constante </div>
-          <div className='card-info-number'>{Math.round(100 * repeated, 2)}%</div>
-
-          <div className='card-info'>MAXIMO Y MINIMO</div>
+          <div className='card-info'>Mínimo y Máximo durante la práctica</div>
           <div className='card-info-number'>
             {Math.min(...data)}-{Math.max(...data)}
           </div>
+
+          <div className='card-info'>Cantidad de veces que el Tempo cambió</div>
+          <div className='card-info-number'>{amountOfChanges}</div>
+
+          <div className='card-info'>Porcentaje total del tiempo tocando constante </div>
+          <div className='card-info-number'>{Math.round(100 * repeated, 2)}%</div>
         </div>
       </div>
     </Fragment>

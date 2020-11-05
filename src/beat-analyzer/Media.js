@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import Analyser from './Analyser';
 import './Media.css';
 import Visualiser from './Visualiser';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import CustomLine from './CustomLine';
 
 const images = [
@@ -37,6 +37,17 @@ const Media = (props) => {
 
   const stopRecording = () => {
     setRecording(false);
+    let toSave = {
+      date: new Date(),
+      data: history,
+      info: 'lo hizo piola',
+      kind: 'Tempo Ajustado',
+    };
+    let tempoBD = JSON.parse(localStorage.getItem('practices')) || {
+      practices: [],
+    };
+    tempoBD.practices.push(toSave);
+    localStorage.setItem('practices', JSON.stringify(tempoBD));
   };
 
   const updateHistory = (bpm) => {
@@ -57,12 +68,10 @@ const Media = (props) => {
       )}
       
       <div className='containerBPM'>
-        <div>
-          <button>
-            <Link to="/fixed-bpm-analyser">Practicar con un BPM fijo</Link>
-          </button>
-        </div>
-        <div className='current-bpm'>
+        <div
+          className='current-bpm'
+          style={{ animation: recording ? 'pulse 1s infinite' : '' }}
+        >
           {history.slice(-1)[0]}
           <p className='fmedium'>BPM</p>
         </div>
@@ -99,6 +108,13 @@ const Media = (props) => {
           </Button>
         </div>
       </div>
+      
+      <div className="containerBPM">
+        <div className="fix-bpm">
+          <BPMForm />
+        </div>
+      </div>
+
       {!recording && mediaStream && history.length > 2 ? (
         <CustomLine data={history} />
       ) : (
@@ -129,6 +145,21 @@ const Medidor = ({ images, history }) => {
       </div>
       <p style={{ textAlign: 'center' }}>{curText}</p>
       {}
+    </Fragment>
+  );
+};
+
+const BPMForm = ({handleChange}) => {
+  return(
+    <Fragment>
+      <Button variant="light">
+        <Link to="/fixed-bpm-analyser">Practicar con un BPM fijo</Link>
+      </Button>
+
+      <label>
+        BPM Objetivo: {} {/*Los {} sirven para forzar que haya un espacio xd*/}
+        <Form.Control type="number" disabled/>
+      </label>
     </Fragment>
   );
 };
