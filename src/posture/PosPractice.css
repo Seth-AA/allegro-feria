@@ -5,26 +5,21 @@
 }
 
 .inselect {
+    text-align: justify;
     background-color: #fff;
-    height: 560px;
+    height: 60vh;
     border-radius: 50px;
 }
 .inselect > img {
-    position: absolute;
+    display: block;
+    margin: 0 auto;
+    padding-top: 2.5em;
+    height: 80%;
     width: 80%;
-    margin: auto;
-    padding-top: 5%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 1;
 }
 
 .inselect > p {
-    display: block;
-    padding-top: 95%;
     text-align: center;
-    align-items: center;
     color: #112351;
     font-weight: normal;
     font-size: 50px;
@@ -34,10 +29,4 @@
 
 .inselect:hover {
     border: 15px solid #112351 !important;
-}
-
-@media only screen and (max-height: 768px) {
-    .inselect {
-        height: 500px;
-    }
 }

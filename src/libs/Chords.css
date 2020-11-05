@@ -1,0 +1,88 @@
+.acordes {
+    display: inline-block;
+    color: black;
+}
+
+.acordes > p {
+    margin: 3em;
+    color: #444444;
+}
+
+.acordes > div {
+    height: 33%;
+    width: 33%;
+}
+
+.acorde {
+    display: inline-block;
+    text-align: center;
+}
+
+.acorde > b {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+}
+
+.catalogo {
+    background: #fff;
+    border-radius: 10px;
+    min-width: 690px !important;
+    min-height: 70vh !important;
+    cursor: default;
+}
+
+.title {
+    margin-top: 0.25em;
+    margin-left: 0.5em;
+    color: #444444;
+}
+
+.notas {
+    display: inline-block !important;
+    margin-top: 0.5em;
+    margin-left: 1.5em;
+    padding-right: 0.75em;
+    font-family: poppins !important;
+    list-style: none;
+}
+
+.notas > label {
+    background-color: #fff;
+    border-color: #fff;
+    border: 0px !important;
+    border-radius: 5px !important;
+    color: #2f8bd6;
+    margin-right: 0.75em;
+}
+
+.notas > label:hover {
+    background-color: #2f8bd6 !important;
+    border-color: #2f8bd6 !important;
+    color: #fff !important;
+}
+
+.active {
+    background-color: #2f8bd6 !important;
+    border-color: #2f8bd6 !important;
+    color: #fff !important;
+}
+
+.sufijo {
+    margin-top: 0.75em;
+    margin-bottom: 1em;
+    color: #444444 !important;
+}
+
+.sufijo > b {
+    margin-bottom: 0.25em;
+}
+
+input {
+    color: #444;
+}
+
+.spin {
+    margin: auto;
+    margin-top: 20%;
+}

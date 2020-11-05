@@ -23,3 +23,16 @@
 .scalo {
     padding-left: 20px !important;
 }
+
+.containerScale {
+    min-height: 69vh;
+}
+
+.unbased {
+    font-family: poppins;
+}
+
+select > option {
+    font-family: "Comic Sans MS" !important;
+    font-weight: small !important;
+}

@@ -4,6 +4,7 @@ import Analyser from './Analyser';
 import './Media.css';
 import Visualiser from './Visualiser';
 import { Button } from 'react-bootstrap';
+import CustomLine from './CustomLine';
 
 const images = [
   require('../assets/images/turtle.svg'),
@@ -30,7 +31,7 @@ const Media = (props) => {
   }, []);
 
   const startRecording = () => {
-    setHistory([0]);
+    setHistory([90]);
     setRecording(true);
   };
 
@@ -50,11 +51,12 @@ const Media = (props) => {
   return (
     <Fragment>
       {recording && mediaStream ? (
-        <Analyser mediaStream={mediaStream} pushCall={updateHistory} />
+        <Analyser mediaStream={mediaStream} pushCall={updateHistory} k />
       ) : (
         ''
       )}
-      <div className='container'>
+      
+      <div className='containerBPM'>
         <div>
           <button>
             <Link to="/fixed-bpm-analyser">Practicar con un BPM fijo</Link>
@@ -97,6 +99,11 @@ const Media = (props) => {
           </Button>
         </div>
       </div>
+      {!recording && mediaStream && history.length > 2 ? (
+        <CustomLine data={history} />
+      ) : (
+        ''
+      )}
     </Fragment>
   );
 };

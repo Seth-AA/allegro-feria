@@ -36,10 +36,10 @@ class Scales extends Component {
 
     render() {
         return (
-            <Container fluid>
+            <Container fluid className="containerScale">
                 <Row className="sel">
                     <Col md={{ span: 6, offset: 3 }}>
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit} className="unbased">
                             <label className="root">
                                 Elige una nota:
                                 <select
@@ -48,16 +48,16 @@ class Scales extends Component {
                                 >
                                     <option value="E">E</option>
                                     <option value="F">F</option>
-                                    <option value="F#">F#/Gb</option>
+                                    <option value="F#">F#/G♭</option>
                                     <option value="G">G</option>
-                                    <option value="G#">G#/Ab</option>
+                                    <option value="G#">G#/A♭</option>
                                     <option value="A">A</option>
-                                    <option value="A#">A#/Bb</option>
+                                    <option value="A#">A#/B♭</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
-                                    <option value="C#">C#/Db</option>
+                                    <option value="C#">C#/D♭</option>
                                     <option value="D">D</option>
-                                    <option value="D#">D#/Eb</option>
+                                    <option value="D#">D#/E♭</option>
                                 </select>
                             </label>
 
@@ -67,15 +67,15 @@ class Scales extends Component {
                                     value={this.state.scale}
                                     onChange={this.handleScale}
                                 >
-                                    <option value="phrygian">phrygian</option>
-                                    <option value="dorian">dorian</option>
-                                    <option value="ionian">ionian</option>
-                                    <option value="lydian">lydian</option>
+                                    <option value="ionian">Jónico</option>
+                                    <option value="dorian">Doríco</option>
+                                    <option value="phrygian">Frigio</option>
+                                    <option value="lydian">Lidio</option>
                                     <option value="mixolydian">
-                                        mixolydian
+                                        Mixolidio
                                     </option>
-                                    <option value="aeolian">aeolian</option>
-                                    <option value="locrian">locrian</option>
+                                    <option value="aeolian">Eólico</option>
+                                    <option value="locrian">Locrio</option>
                                 </select>
                             </label>
                         </form>

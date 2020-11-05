@@ -3,11 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Media from './beat-analyzer/Media';
 import Fixed_Media from './beat-analyzer/Fixed_Media';
 import PosPractice from './posture/PosPractice';
-// import PosPractice from './posture/PosPractice';
-import StaticPosture from './posture/StaticPosture';
-
+//import StaticPosture from './posture/StaticPosture';
 import Footer from './Footer';
 import Scales from './libs/Scales';
+import Chords from './libs/Chords';
 import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.style.css';
@@ -28,8 +27,11 @@ export default function App() {
             <Nav.Link href='/bpm-analyser' className='navi'>
               Ritmo
             </Nav.Link>
-            <Nav.Link href='/Scales' className='navi'>
+            <Nav.Link href='/scales' className='navi'>
               Escalas
+            </Nav.Link>
+            <Nav.Link href='/chords' className='navi'>
+              Acordes
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
@@ -46,14 +48,17 @@ export default function App() {
         <Route path='/posture-analyzer'>
           <PosPractice />
         </Route>
-        <Route path='/Scales'>
+        <Route path='/scales'>
           <Scales />
+        </Route>
+        <Route path='/chords'>
+          <Chords />
         </Route>
         <Route path=''>
           <PosPractice />
         </Route>
       </Switch>
-      <Footer />
+      <Footer/>
     </Router>
   );
 }
