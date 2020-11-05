@@ -55,6 +55,16 @@ const CustomLine = ({ data }) => {
   const amountOfChanges = [...new Set(data)].length;
   console.log(repeated);
 
+  const evalColor = (performance)  => {
+    if (performance > 80){
+      return {color:"limegreen"}
+    }
+    else if(performance > 31)
+      return {color:"yellow"}
+    else{
+      return {color:"red"}
+    }
+  }
   return (
     <Fragment>
       <div className='container-fluid grid-container'>
@@ -113,7 +123,7 @@ const CustomLine = ({ data }) => {
           <div className='card-info-number'>{amountOfChanges}</div>
 
           <div className='card-info'>Porcentaje total del tiempo tocando constante </div>
-          <div className='card-info-number'>{Math.round(100 * repeated, 2)}%</div>
+          <div className='card-info-number' style={evalColor(Math.round(100 * repeated, 2))}>{Math.round(100 * repeated, 2)}%</div>
         </div>
       </div>
     </Fragment>

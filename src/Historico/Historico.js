@@ -35,6 +35,18 @@ const Card = ({ elem }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const evalColor = (performance)  => {
+    if (performance > 80){
+      return {color:"limegreen"}
+    }
+    else if(performance > 31)
+      return {color:"yellow"}
+    else{
+      return {color:"red"}
+    }
+  }
+
+
   return (
     <Fragment>
       <div
@@ -52,7 +64,10 @@ const Card = ({ elem }) => {
           <p class='card-text'>{date}</p>
           <p>
             <span> Desempeño </span>{' '}
-            <span style={{ color: 'limegreen' }}>{performance}%</span>
+            {
+              
+            }
+            <span style={evalColor(performance)}>{performance}%</span>
           </p>
           <p>
             <span> Duración </span>{' '}

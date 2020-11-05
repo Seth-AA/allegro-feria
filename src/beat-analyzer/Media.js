@@ -5,6 +5,7 @@ import './Media.css';
 import Visualiser from './Visualiser';
 import { Button, Form } from 'react-bootstrap';
 import CustomLine from './CustomLine';
+import NumericInput from 'react-numeric-input';
 
 const images = [
   require('../assets/images/turtle.svg'),
@@ -152,13 +153,13 @@ const Medidor = ({ images, history }) => {
 const BPMForm = ({handleChange}) => {
   return(
     <Fragment>
-      <Button variant="light">
-        <Link to="/fixed-bpm-analyser">Practicar con un BPM fijo</Link>
+      <Button variant="outline-light" href="/fixed-bpm-analyser">
+        Practicar con un BPM fijo
       </Button>
 
       <label>
         BPM Objetivo: {} {/*Los {} sirven para forzar que haya un espacio xd*/}
-        <Form.Control type="number" disabled/>
+        <NumericInput mobile className="form-control" disabled/>
       </label>
     </Fragment>
   );

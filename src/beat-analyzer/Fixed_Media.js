@@ -5,6 +5,7 @@ import './Media.css';
 import Visualiser from './Visualiser';
 import { Button, Form } from 'react-bootstrap';
 import Fixed_CustomLine from './Fixed_CustomLine';
+import NumericInput from 'react-numeric-input';
 
 const images = [
   require('../assets/images/turtle.svg'),
@@ -21,7 +22,7 @@ const Fixed_Media = (props) => {
   const [recording, setRecording] = useState(false);
   const [history, setHistory] = useState([0]);
   const [movement, setMovement] = useState(0);
-  const [fixed_bpm, setFixedBPM] = useState(null);
+  const [fixed_bpm, setFixedBPM] = useState(60);
 
   useEffect(async () => {
     const tempAudio = await navigator.mediaDevices.getUserMedia({
@@ -65,7 +66,7 @@ const Fixed_Media = (props) => {
   };
 
   const handleUpdateFixedBPM = (event) => {
-    setFixedBPM(event.target.value);
+    setFixedBPM(event);
   }
 
   //render
@@ -121,7 +122,7 @@ const Fixed_Media = (props) => {
 
       <div className="containerBPM">
         <div className="fix-bpm">
-          <BPMForm handleChange={handleUpdateFixedBPM} />
+          <BPMForm handleChange={handleUpdateFixedBPM} fixed_bpm={fixed_bpm} />
         </div>
       </div>
 
@@ -163,16 +164,16 @@ const Medidor = ({ images, history, fixedBPM }) => {
   );
 };
 
-const BPMForm = ({handleChange}) => {
+const BPMForm = ({handleChange,fixed_bpm}) => {
   return(
     <Fragment>
-      <Button variant="light">
-        <Link to="/bpm-analyser">Practicar con un BPM libre</Link>
+      <Button variant="outline-light" href="/bpm-analyser">
+        Practicar con un BPM fijo
       </Button>
 
       <label>
         BPM Objetivo: {} {/*Los {} sirven para forzar que haya un espacio xd*/}
-        <Form.Control type="number" placeholder="60" onChange={handleChange}/>
+        <NumericInput mobile className="form-control" value={fixed_bpm}	min={ 1 } max={ 320 }  onChange={handleChange}/>
       </label>
     </Fragment>
   );
