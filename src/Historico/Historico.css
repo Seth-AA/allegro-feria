@@ -1,0 +1,15 @@
+.histo {
+    margin: auto;
+    border-radius: 10px;
+    background-color: rgba(39, 50, 79, 0.8);
+    min-height: 65vh;
+}
+.histo h1 {
+    padding-top: 0.25em;
+    opacity: 0.8;
+}
+
+.tempoNull {
+    margin-left: 5em;
+    margin-top: 1em;
+}

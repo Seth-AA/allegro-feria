@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import CustomLine from '../beat-analyzer/CustomLine';
+import './Historico.css';
 
 const Historico = (props) => {
   const [tempoBD, setTempoBD] = useState(
@@ -10,10 +11,11 @@ const Historico = (props) => {
 
   return (
     <Fragment>
-      <div className='container' style={{margin: "auto"}}>
+      <div className='container histo'>
+        <h1>Historial de practicas</h1>
         <div className='row'>
           {tempoBD === null
-            ? 'AUN NADA!'
+            ? <p className="tempoNull">No se han registrado practicas.</p>
             : tempoBD.practices.map((elem, id) => {
                 return <Card key={id} elem={elem} />;
               })}
